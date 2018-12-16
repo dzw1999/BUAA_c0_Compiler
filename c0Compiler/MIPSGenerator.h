@@ -24,7 +24,7 @@ private:
     StackManager stackManager;
     ExceptionHandler exceptionHandler;
     FILE *MIPSFile;
-    char MIPSTextCode[MAX_MIPS_LENGTH][500], MIPSDataCode[MAX_MIPS_DATA_CODE][500];
+    char MIPSTextCode[MAX_MIPS_LENGTH][100], MIPSDataCode[MAX_MIPS_DATA_CODE][100];
     int MIPSTextLine, MIPSDataLine;
 
     void generateMIPSOfQuad(Quad quad);

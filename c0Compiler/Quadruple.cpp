@@ -10,13 +10,13 @@ Quadruple& Quadruple::getQuadruple(FILE *quadrupleOut) {
 }
 
 void Quadruple::addQuadruple(Operator op, string dst, string src1, string src2, bool global) {
-    Quad q;
-    q.op = op;
-    q.src1 = src1;
-    q.src2 = src2;
-    q.dst = dst;
-    q.global = global;
-    quadrupleList[quadNum++] = q;
+    Quad *q = new Quad;
+    q->op = op;
+    q->src1 = src1;
+    q->src2 = src2;
+    q->dst = dst;
+    q->global = global;
+    quadrupleList[quadNum++] = *q;
 }
 
 //输出
@@ -92,6 +92,8 @@ void Quadruple::toString(Quad q, string &res) {
             "BLE",    // 小于或等于跳转
             "BEQ",    // 等于跳转
             "BNE",    // 不等于跳转
+            "SWITCH_BNE",  //switch bne
+            "SWITCH_VAR", //switch var
             "J",      // 无条件跳转
             "CALL",   // 函数调用，带返回值
             "RET",    // 函数返回
@@ -105,7 +107,7 @@ void Quadruple::toString(Quad q, string &res) {
             "CONST_DECLARE",      //常量声明
             "MAIN_FUNCTION_DEFINE",    //main函数定义
             "FUNCTION_DEFINE",    //函数定义
-            "FUNCTION_END",       //函数定义结束
+            "FUNCTION_END",
             "PARAMETER_DECLARE"
     };
     sprintf(rtn, "%s: %s, %s, %s\n", OperatorStr[q.op].c_str(), q.dst.c_str(), q.src1.c_str(), q.src2.c_str());

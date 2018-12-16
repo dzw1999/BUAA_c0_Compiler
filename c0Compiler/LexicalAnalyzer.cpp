@@ -106,6 +106,8 @@ void LexicalAnalyzer::nextSymbol() {
         ADD_TO_SYMBOL_LIST;
     } else if (charGot == '\"') {
         do {
+            if(charGot == '\\')
+                symGot[symPtr++] = '\\';
             symGot[symPtr++] = charGot;
             nextChar();
         } while (isStrChar(charGot));

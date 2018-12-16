@@ -18,14 +18,14 @@ int main(int argc, char *argv[]) {
     else
         cin >> fileName;
     FILE *fin = fopen((fileName).c_str(), "r");
-    if (fin == nullptr) {
+    if (fin == NULL) {
         printf("File does not exist.\n");
         return 0;
     }
     FILE *grammarOut = fopen("Grammar Analysis.txt", "w");
     FILE *quadrupleOut = fopen("Quadruple.txt", "w");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
-
+    printf("start\n");
     LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer::getLexicalAnalyzer(fin);
 
     ExceptionHandler exceptionHandler = ExceptionHandler::getExceptionHandler();
@@ -41,20 +41,20 @@ int main(int argc, char *argv[]) {
     GrammarAnalyzer grammarAnalyzer = GrammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer,
                                                       grammarOut);
 
+    fclose(grammarOut);
+
     if (grammarAnalyzer.grammarAnalyze() == 1) {
         exceptionHandler.error(37, 0);
     }
 
+    quadruple.output();
+    fclose(quadrupleOut);
+
     MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(quadruple, symbolTable, stackManager,
                                                                   exceptionHandler, MIPSOut);
-
-    quadruple.output();
-
     mipsGenerator.generateMIPS();
-
-    fclose(fin);
-    fclose(grammarOut);
-    fclose(quadrupleOut);
     fclose(MIPSOut);
+    fclose(fin);
+
     return 0;
 }
