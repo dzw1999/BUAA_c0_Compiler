@@ -13,6 +13,7 @@ CMakeFiles/C0Compiler.dir/GrammarAnalyzer.cpp.o: ../SemanticAnalyzer.h
 CMakeFiles/C0Compiler.dir/GrammarAnalyzer.cpp.o: ../SymbolTable.h
 CMakeFiles/C0Compiler.dir/GrammarAnalyzer.cpp.o: ../Type.h
 
+CMakeFiles/C0Compiler.dir/LexicalAnalyzer.cpp.o: ../ExceptionHandler.h
 CMakeFiles/C0Compiler.dir/LexicalAnalyzer.cpp.o: ../LexicalAnalyzer.cpp
 CMakeFiles/C0Compiler.dir/LexicalAnalyzer.cpp.o: ../LexicalAnalyzer.h
 CMakeFiles/C0Compiler.dir/LexicalAnalyzer.cpp.o: ../Type.h

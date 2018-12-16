@@ -8,12 +8,13 @@
 #include <cstdio>
 #include <map>
 #include "Type.h"
+#include "ExceptionHandler.h"
 
 using namespace std;
 
 class LexicalAnalyzer {
 public:
-    static LexicalAnalyzer &getLexicalAnalyzer(FILE *fin);  // 单例设计模式
+    static LexicalAnalyzer &getLexicalAnalyzer(FILE *fin, ExceptionHandler &theExceptionHandler);  // 单例设计模式
 
     string symbolList[MAX_SYMBOL_NUM];          // 存储symbol的列表
     symbolType symbolTypeList[MAX_SYMBOL_NUM];  // 存储symbol的类型的列表
@@ -34,9 +35,10 @@ public:
 
 private:
     FILE *fin;                          // 输入文件
+    ExceptionHandler &exceptionHandler;
     char charGot;                       // 当前字符
 
-    LexicalAnalyzer(FILE *input);       // 真的的构造函数,实现单例
+    LexicalAnalyzer(FILE *input, ExceptionHandler &theExceptionHandler);       // 真的的构造函数,实现单例
 
     void nextChar();                    // 读下一个字符
 

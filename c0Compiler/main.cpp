@@ -25,10 +25,12 @@ int main(int argc, char *argv[]) {
     FILE *grammarOut = fopen("Grammar Analysis.txt", "w");
     FILE *quadrupleOut = fopen("Quadruple.txt", "w");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
+
     printf("start compiling...\n");
-    LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer::getLexicalAnalyzer(fin);
 
     ExceptionHandler exceptionHandler = ExceptionHandler::getExceptionHandler();
+
+    LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer::getLexicalAnalyzer(fin, exceptionHandler);
 
     SymbolTable symbolTable = SymbolTable::getSymbolTable();
 
@@ -43,9 +45,11 @@ int main(int argc, char *argv[]) {
 
     lexicalAnalyzer.lexicalAnalyze(); // 词法分析
 
-    if (grammarAnalyzer.grammarAnalyze() == 1) {    // 语法分析(语义分析伴随语法分析)
-        exceptionHandler.error(37, 0);
-    }
+    if (grammarAnalyzer.grammarAnalyze() == 1)    // 语法分析(语义分析伴随语法分析)
+        printf("Exception occured in grammar analysis.\n");
+    else
+        printf("Grammar analysis Succeeded.\n");
+
     fclose(grammarOut);
 
     quadruple.output(); //输出四元式

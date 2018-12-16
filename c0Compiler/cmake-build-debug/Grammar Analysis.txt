@@ -1,0 +1,2 @@
+line 1, This is a const definition.
+line 3, This is a const declaration.

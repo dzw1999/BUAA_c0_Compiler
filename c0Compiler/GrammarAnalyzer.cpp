@@ -59,9 +59,9 @@ int GrammarAnalyzer::grammarAnalyze() {
         return 1;
     }
     if (SYM_TYPE == FINISH) {
-        printf("Grammar analysis Succeeded.\n");
         return 0;
     }
+    exceptionHandler.error(37, SYM_LINE);
     return 1;
 }
 

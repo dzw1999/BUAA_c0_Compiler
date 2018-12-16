@@ -66,7 +66,8 @@ void ExceptionHandler::error(int errorCode, int line) {
             "Cannot write an array",
             "Unknown comparator",
             "Unknown quadruple operator",
-            "In MIPS generating: Cannot find in symbol table"
+            "In MIPS generating: Cannot find in symbol table",
+            "Illegal symbol",                                                       //55
     };
     if(errorCode == 37)
         printf("%s\n", errorMsg[errorCode].c_str());
@@ -74,7 +75,6 @@ void ExceptionHandler::error(int errorCode, int line) {
         printf("MIPS line %d: %s\n", line, errorMsg[errorCode].c_str());
     } else
         printf("line %d: %s\n", line, errorMsg[errorCode].c_str());
-    throw errorCode;
     //exit(0);
 }
 

@@ -17,12 +17,13 @@ int isStrChar(char x) {
 }
 
 
-LexicalAnalyzer &LexicalAnalyzer::getLexicalAnalyzer(FILE *fin) {
-    static LexicalAnalyzer instance(fin);
+LexicalAnalyzer &LexicalAnalyzer::getLexicalAnalyzer(FILE *fin, ExceptionHandler &theExceptionHandler) {
+    static LexicalAnalyzer instance(fin, theExceptionHandler);
     return instance;
 }
 
-LexicalAnalyzer::LexicalAnalyzer(FILE *input) {
+LexicalAnalyzer::LexicalAnalyzer(FILE *input, ExceptionHandler &theExceptionHandler) : exceptionHandler(
+        theExceptionHandler) {
     LexicalAnalyzer::symbolNum = 0;
     LexicalAnalyzer::lineCnt = 1;
     LexicalAnalyzer::columnCnt = 0;
@@ -56,7 +57,11 @@ void LexicalAnalyzer::output(FILE *fout) {
 
 void LexicalAnalyzer::lexicalAnalyze() {
     do {
-        LexicalAnalyzer::nextSymbol();
+        try {
+            LexicalAnalyzer::nextSymbol();
+        }catch (int errorCode){
+            exceptionHandler.error(55, lineCnt);
+        }
     } while (symbolTypeList[symbolNum - 1] != FINISH);
 }
 
@@ -105,7 +110,7 @@ void LexicalAnalyzer::nextSymbol() {
         ADD_TO_SYMBOL_LIST;
     } else if (charGot == '\"') {
         do {
-            if(charGot == '\\')
+            if (charGot == '\\')
                 symGot[symPtr++] = '\\';
             symGot[symPtr++] = charGot;
             nextChar();
@@ -231,6 +236,8 @@ void LexicalAnalyzer::nextSymbol() {
         if (!preRead)
             nextChar();
     }
+    if(symType == ILLEGAL)
+        throw 55;
 }
 
 

@@ -72,8 +72,6 @@ private:
     void writeLocal(int offset);
     void writeGlobal(int offset);
     void writeParameter(int paraNum,int paraOrder);
-    void tempDeclare(string temp);
-    string encodeGlobal(string ident);
 
     MIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager, ExceptionHandler &theExceptionHandler, FILE *theMIPSFile);
 };
