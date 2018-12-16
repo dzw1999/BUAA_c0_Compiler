@@ -10,7 +10,7 @@ ExceptionHandler &ExceptionHandler::getExceptionHandler() {
     return instance;
 }
 
-void ExceptionHandler::error(int errorCode, int line) {
+void ExceptionHandler::error(int errorCode, int line, string symbol) {
     static string errorMsg[100] = {
             "No error",                                                             //0
             "Expected \"const\" at the beginning of constant declaration.",         //1
@@ -69,11 +69,14 @@ void ExceptionHandler::error(int errorCode, int line) {
             "In MIPS generating: Cannot find in symbol table",
             "Illegal symbol",                                                       //55
     };
+    errorCnt++;
     if(errorCode == 37)
         printf("%s\n", errorMsg[errorCode].c_str());
-    else if (errorCode == 54){
+    else if (errorCode == 54)
         printf("MIPS line %d: %s\n", line, errorMsg[errorCode].c_str());
-    } else
+    else if (errorCode == 55)
+        printf("line %d: %s : %s\n", line, errorMsg[errorCode].c_str(), symbol.c_str());
+    else
         printf("line %d: %s\n", line, errorMsg[errorCode].c_str());
     //exit(0);
 }

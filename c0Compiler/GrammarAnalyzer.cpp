@@ -70,6 +70,7 @@ void GrammarAnalyzer::program() {
     if (SYM_TYPE == CONST)
         constDeclare();
 
+
     // [变量说明]
     // 使用try catch避免误识别函数定义
     saveSymbolCnt = symbolCnt;
@@ -79,15 +80,13 @@ void GrammarAnalyzer::program() {
     } catch (int errorCode) {
         if (errorCode == 34)
             symbolCnt = saveSymbolCnt;
-        else {
-            throw errorCode;
-        }
     }
 
     // [函数定义]
     saveSymbolCnt = symbolCnt;
-    try {
-        while (SYM_TYPE == VOID || SYM_TYPE == INT || SYM_TYPE == CHAR) {
+
+    while (SYM_TYPE == VOID || SYM_TYPE == INT || SYM_TYPE == CHAR) {
+        try {
             if (SYM_TYPE == VOID) {
                 voidFunctionDefine();
             } else {
@@ -95,47 +94,78 @@ void GrammarAnalyzer::program() {
             }
             saveSymbolCnt = symbolCnt;
         }
-    } catch (int errorCode) {
-        if (errorCode == 35) {
-            symbolCnt = saveSymbolCnt;
-            currentFunction = "";
-        } else
-            throw errorCode;
+        catch (int errorCode) {
+            if (errorCode == 35) {
+                symbolCnt = saveSymbolCnt;
+                currentFunction = "";
+                break;
+            } else {
+                exceptionHandler.error(errorCode, SYM_LINE);
+                while (SYM_TYPE != CONST && SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID &&
+                       SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+                    GET_SYM;
+                }
+            }
+        }
     }
 
+
     // 主函数
-    mainFunction();
+    try {
+        mainFunction();
+    } catch (int errorCode) {
+        exceptionHandler.error(errorCode, SYM_LINE);
+    }
+
 
 }
 
 void GrammarAnalyzer::constDeclare() {
     do {
-        if (SYM_TYPE != CONST) {
-            ERROR(1);
+        try {
+            if (SYM_TYPE != CONST) {
+                ERROR(1);
+            }
+            GET_SYM;
+            constDefine();
+            if (SYM_TYPE != SEMICOLON) {
+                ERROR(2);
+            }
+            GET_SYM;
+            printmsg("line %d, This is a const declaration.\n", SYM_LINE);
+        } catch (int errorCode) {
+            exceptionHandler.error(errorCode, SYM_LINE);
+            while (SYM_TYPE != CONST && SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+                GET_SYM;
+            }
         }
-        GET_SYM;
-        constDefine();
-        if (SYM_TYPE != SEMICOLON) {
-            ERROR(2);
-        }
-        GET_SYM;
-        printmsg("line %d, This is a const declaration.\n", SYM_LINE);
     } while (SYM_TYPE == CONST);
 }
 
 void GrammarAnalyzer::varDeclare() {
     do {
-        varDefine();
-        if (SYM_TYPE != SEMICOLON) {
-            if (SYM_TYPE == LEFT_BRACKET) {
-                ERROR(34);
-            } else {
-                ERROR(2);
+        try {
+            varDefine();
+            if (SYM_TYPE != SEMICOLON) {
+                if (SYM_TYPE == LEFT_BRACKET) {
+                    ERROR(34);
+                } else {
+                    ERROR(2);
+                }
+            }
+            GET_SYM;
+            printmsg("line %d, This is a var declaration.\n", SYM_LINE);
+            saveSymbolCnt = symbolCnt;
+        } catch (int errorCode) {
+            if (errorCode == 34)
+                throw errorCode;
+            else {
+                exceptionHandler.error(errorCode, SYM_LINE);
+                while (SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+                    GET_SYM;
+                }
             }
         }
-        GET_SYM;
-        printmsg("line %d, This is a var declaration.\n", SYM_LINE);
-        saveSymbolCnt = symbolCnt;
     } while (SYM_TYPE == INT || SYM_TYPE == CHAR);
 }
 
@@ -420,9 +450,13 @@ void GrammarAnalyzer::compoundStatement() {
         constDeclare();
 
     // [变量说明]
-    if (SYM_TYPE == INT || SYM_TYPE == CHAR)
-        varDeclare();
-
+    try {
+        if (SYM_TYPE == INT || SYM_TYPE == CHAR)
+            varDeclare();
+    } catch (int errorCode) {
+        exceptionHandler.error(errorCode, SYM_LINE);
+        return;
+    }
     statementList();
     printmsg("line %d, These are compound Statements.\n", SYM_LINE);
 }
@@ -503,7 +537,7 @@ void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variab
         }
         printmsg("line %d, This is an expression.\n", SYM_LINE);
     }
-    if(isSwitch)
+    if (isSwitch)
         semanticAnalyzer.switchVar(dst);
     rtn_expr = dst;
 }
@@ -844,7 +878,7 @@ void GrammarAnalyzer::switchStatement() {
     }
     GET_SYM;
     caseList(value, switchEndLabel);
-    if(SYM_TYPE == DEFAULT)
+    if (SYM_TYPE == DEFAULT)
         defaultStatement(switchEndLabel);
     if (SYM_TYPE != RIGHT_BRACE) {
         ERROR(6);
@@ -1124,7 +1158,7 @@ void GrammarAnalyzer::returnStatement() {
 int GrammarAnalyzer::integer() {
     bool nag = false;
     if (SYM_TYPE == PLUS || SYM_TYPE == MINUS) {
-        if(SYM_TYPE == MINUS)
+        if (SYM_TYPE == MINUS)
             nag = true;
         GET_SYM;
         if (SYM_TYPE == UNSIGN_NUMBER) {

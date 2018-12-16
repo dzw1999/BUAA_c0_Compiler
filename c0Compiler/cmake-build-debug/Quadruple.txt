@@ -1,1 +1,5 @@
-CONST_DECLARE: a, int, 1
+FUNCTION_DEFINE: f1, void, 
+RET: , 1, 
+FUNCTION_END: , , 
+MAIN_FUNCTION_DEFINE: main, void, 
+FUNCTION_END: , , 

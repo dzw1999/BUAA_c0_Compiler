@@ -12,13 +12,13 @@ using namespace std;
 class ExceptionHandler {
 public:
     int errorLine;
+    int errorCnt;
 
     static ExceptionHandler &getExceptionHandler();  // 单例设计模式
 
-    void error(int errorCode, int line);
+    void error(int errorCode, int line, string symbol = "");
 
 private:
-    int errorCnt;
     ExceptionHandler();
 };
 

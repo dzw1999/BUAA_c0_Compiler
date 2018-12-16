@@ -60,7 +60,7 @@ void LexicalAnalyzer::lexicalAnalyze() {
         try {
             LexicalAnalyzer::nextSymbol();
         }catch (int errorCode){
-            exceptionHandler.error(55, lineCnt);
+            exceptionHandler.error(55, lineCnt, symGot);
         }
     } while (symbolTypeList[symbolNum - 1] != FINISH);
 }

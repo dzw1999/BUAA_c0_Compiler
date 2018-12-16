@@ -46,16 +46,6 @@ Type.h
 ExceptionHandler.h
 /home/andyson/BUAA_c0_Compiler/c0Compiler/ExceptionHandler.h
 
-/home/andyson/BUAA_c0_Compiler/c0Compiler/MIPSGenerator.h
-Quadruple.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/Quadruple.h
-SymbolTable.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/SymbolTable.h
-StackManager.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/StackManager.h
-ExceptionHandler.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/ExceptionHandler.h
-
 /home/andyson/BUAA_c0_Compiler/c0Compiler/Quadruple.h
 string
 -
@@ -70,12 +60,6 @@ Type.h
 Quadruple.h
 /home/andyson/BUAA_c0_Compiler/c0Compiler/Quadruple.h
 
-/home/andyson/BUAA_c0_Compiler/c0Compiler/StackManager.h
-string
--
-stack
--
-
 /home/andyson/BUAA_c0_Compiler/c0Compiler/SymbolTable.h
 cstdio
 -
@@ -89,28 +73,4 @@ Type.h
 /home/andyson/BUAA_c0_Compiler/c0Compiler/Type.h
 map
 -
-
-/home/andyson/BUAA_c0_Compiler/c0Compiler/main.cpp
-cstdio
--
-cstring
--
-string
--
-iostream
--
-LexicalAnalyzer.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/LexicalAnalyzer.h
-GrammarAnalyzer.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/GrammarAnalyzer.h
-ExceptionHandler.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/ExceptionHandler.h
-SymbolTable.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/SymbolTable.h
-SemanticAnalyzer.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/SemanticAnalyzer.h
-Quadruple.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/Quadruple.h
-MIPSGenerator.h
-/home/andyson/BUAA_c0_Compiler/c0Compiler/MIPSGenerator.h
 
