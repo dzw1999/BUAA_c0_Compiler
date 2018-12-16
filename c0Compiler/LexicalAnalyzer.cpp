@@ -42,7 +42,6 @@ LexicalAnalyzer::LexicalAnalyzer(FILE *input) {
     LexicalAnalyzer::keywords.insert(pair<string, symbolType>("return", RETURN));
     LexicalAnalyzer::keywords.insert(pair<string, symbolType>("scanf", SCANF));
     LexicalAnalyzer::keywords.insert(pair<string, symbolType>("printf", PRINTF));
-    LexicalAnalyzer::lexicalAnalyze(); //   直接开始分析
 }
 
 void LexicalAnalyzer::output(FILE *fout) {

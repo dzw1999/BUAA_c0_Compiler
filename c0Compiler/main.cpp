@@ -41,18 +41,20 @@ int main(int argc, char *argv[]) {
     GrammarAnalyzer grammarAnalyzer = GrammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer,
                                                       grammarOut);
 
-    fclose(grammarOut);
+    lexicalAnalyzer.lexicalAnalyze(); // 词法分析
 
-    if (grammarAnalyzer.grammarAnalyze() == 1) {
+    if (grammarAnalyzer.grammarAnalyze() == 1) {    // 语法分析(语义分析伴随语法分析)
         exceptionHandler.error(37, 0);
     }
+    fclose(grammarOut);
 
-    quadruple.output();
+    quadruple.output(); //输出四元式
+
     fclose(quadrupleOut);
 
     MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(quadruple, symbolTable, stackManager,
                                                                   exceptionHandler, MIPSOut);
-    mipsGenerator.generateMIPS();
+    mipsGenerator.generateMIPS();   //生成MIPS
     fclose(MIPSOut);
     fclose(fin);
 

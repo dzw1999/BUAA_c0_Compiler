@@ -74,7 +74,8 @@ void ExceptionHandler::error(int errorCode, int line) {
         printf("MIPS line %d: %s\n", line, errorMsg[errorCode].c_str());
     } else
         printf("line %d: %s\n", line, errorMsg[errorCode].c_str());
-    exit(0);
+    throw errorCode;
+    //exit(0);
 }
 
 ExceptionHandler::ExceptionHandler() {
