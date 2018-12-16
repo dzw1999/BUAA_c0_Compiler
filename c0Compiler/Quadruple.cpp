@@ -10,6 +10,7 @@ Quadruple& Quadruple::getQuadruple(FILE *quadrupleOut) {
 }
 
 void Quadruple::addQuadruple(Operator op, string dst, string src1, string src2, bool global) {
+    //一个明显的内存泄漏,不过作业不要求复用性所以懒得改= =
     Quad *q = new Quad;
     q->op = op;
     q->src1 = src1;
