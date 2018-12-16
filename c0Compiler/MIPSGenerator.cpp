@@ -23,11 +23,11 @@ void MIPSGenerator::generateMIPS() {
     for (int i = 0; i < quadruple.length(); ++i) {
         string out;
         quadruple.toString(quadruple.quadrupleList[i], out);
-        printf("start process quad: %s\n", out.c_str());
-        printf("%d\n", quadruple.quadrupleList[i].op);
-        printf("%s\n", quadruple.quadrupleList[i].dst.c_str());
-        printf("%s\n", quadruple.quadrupleList[i].src1.c_str());
-        printf("%s\n", quadruple.quadrupleList[i].src2.c_str());
+//        printf("start process quad: %s\n", out.c_str());
+//        printf("%d\n", quadruple.quadrupleList[i].op);
+//        printf("%s\n", quadruple.quadrupleList[i].dst.c_str());
+//        printf("%s\n", quadruple.quadrupleList[i].src1.c_str());
+//        printf("%s\n", quadruple.quadrupleList[i].src2.c_str());
         generateMIPSOfQuad(quadruple.quadrupleList[i]);
     }
     fprintf(MIPSFile, ".data\n");

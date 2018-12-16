@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     FILE *grammarOut = fopen("Grammar Analysis.txt", "w");
     FILE *quadrupleOut = fopen("Quadruple.txt", "w");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
-    printf("start\n");
+    printf("start compiling...\n");
     LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer::getLexicalAnalyzer(fin);
 
     ExceptionHandler exceptionHandler = ExceptionHandler::getExceptionHandler();
