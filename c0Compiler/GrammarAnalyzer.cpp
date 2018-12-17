@@ -756,8 +756,11 @@ void GrammarAnalyzer::assignStatement() {
         if (ste.oType != VARIABLE && ste.oType != PARAMETER) {
             ERROR(46);
         }
-        GET_SYM;
         identType = ste.vType;
+        if(identType != INT_TYPE && identType != CHAR_TYPE){
+            ERROR(57);
+        }
+        GET_SYM;
         expression(value, exprType, variable);
         //类型检验
         if (identType == CHAR_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
