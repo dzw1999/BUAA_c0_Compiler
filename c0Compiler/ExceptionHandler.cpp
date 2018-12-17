@@ -68,6 +68,7 @@ void ExceptionHandler::error(int errorCode, int line, string symbol) {
             "Unknown quadruple operator",
             "In MIPS generating: Cannot find in symbol table",
             "Illegal symbol",                                                       //55
+            "Cannot assign a non-character to a CHAR-TYPE VARIABLE"
     };
     errorCnt++;
     if(errorCode == 37)

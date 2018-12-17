@@ -135,7 +135,8 @@ void GrammarAnalyzer::constDeclare() {
             printmsg("line %d, This is a const declaration.\n", SYM_LINE);
         } catch (int errorCode) {
             exceptionHandler.error(errorCode, SYM_LINE);
-            while (SYM_TYPE != CONST && SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+            while (SYM_TYPE != CONST && SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH &&
+                   SYM_TYPE != RIGHT_BRACE) {
                 GET_SYM;
             }
         }
@@ -161,7 +162,8 @@ void GrammarAnalyzer::varDeclare() {
                 throw errorCode;
             else {
                 exceptionHandler.error(errorCode, SYM_LINE);
-                while (SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+                while (SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID && SYM_TYPE != FINISH &&
+                       SYM_TYPE != RIGHT_BRACE) {
                     GET_SYM;
                 }
             }
@@ -735,7 +737,7 @@ void GrammarAnalyzer::assignStatement() {
     string offset;       // 如果是数组，记录下标
     string value;        // 要赋的值
     valueType identType; // 被赋值的变量的类型
-    valueType exprType; // 要赋的值的类型
+    valueType exprType;  // 要赋的值的类型
     valueType offsetType;
     bool variable;       // 表达式是否为变量表达式
     bool offsetVariable;
@@ -755,7 +757,12 @@ void GrammarAnalyzer::assignStatement() {
             ERROR(46);
         }
         GET_SYM;
+        identType = ste.vType;
         expression(value, exprType, variable);
+        //类型检验
+        if (identType == CHAR_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
+            ERROR(56);
+        }
         semanticAnalyzer.assign(ident, value, identType, exprType);
         printmsg("line %d, This is an assign statement.\n", SYM_LINE);
         return;
@@ -765,6 +772,7 @@ void GrammarAnalyzer::assignStatement() {
             ERROR(42);
         }
         GET_SYM;
+        identType = ste.vType;
         expression(offset, offsetType, offsetVariable);
         if (SYM_TYPE != RIGHT_SQUARE) {
             ERROR(13);
@@ -779,6 +787,10 @@ void GrammarAnalyzer::assignStatement() {
         }
         GET_SYM;
         expression(value, exprType, variable);
+        //类型检验
+        if (identType == CHAR_ARRAY_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
+            ERROR(56);
+        }
         semanticAnalyzer.assignToArray(ident, offset, value, identType, exprType);
         printmsg("line %d, This is an assign statement.\n", SYM_LINE);
     } else {
