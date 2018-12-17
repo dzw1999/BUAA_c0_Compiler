@@ -193,6 +193,7 @@ void SemanticAnalyzer::assignToArray(const string &arrayName, const string &inde
 }
 
 void SemanticAnalyzer::getFromArray(const string &arrname, const string &index, string &dst) {
+    dst = quadruple.newTemp();
     quadruple.addQuadruple(GAR, dst, arrname, index);
 }
 
