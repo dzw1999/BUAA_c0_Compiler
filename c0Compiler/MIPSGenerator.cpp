@@ -178,10 +178,10 @@ void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
 void MIPSGenerator::ADDToMIPS(Quad quad) {
     sprintf(MIPSTextCode[MIPSTextLine++], "#add: %s = %s + %s\n", quad.dst.c_str(), quad.src1.c_str(),
             quad.src2.c_str());
-    //src1
-    getSrcToMIPS(quad.src1, 1);
     //src2
     getSrcToMIPS(quad.src2, 2);
+    //src1
+    getSrcToMIPS(quad.src1, 1);
     //add
     sprintf(MIPSTextCode[MIPSTextLine++], "add $s3, $s1, $s2\n");
     //write dst
@@ -208,10 +208,10 @@ void MIPSGenerator::SUBToMIPS(Quad quad) {
 void MIPSGenerator::MULToMIPS(Quad quad) {
     sprintf(MIPSTextCode[MIPSTextLine++], "#mul: %s = %s * %s\n", quad.dst.c_str(), quad.src1.c_str(),
             quad.src2.c_str());
-    //src1
-    getSrcToMIPS(quad.src1, 1);
     //src2
     getSrcToMIPS(quad.src2, 2);
+    //src1
+    getSrcToMIPS(quad.src1, 1);
     //mult
     sprintf(MIPSTextCode[MIPSTextLine++], "mult $s1, $s2\n");
     sprintf(MIPSTextCode[MIPSTextLine++], "mflo $s3\n");
@@ -291,38 +291,38 @@ void MIPSGenerator::LABToMIPS(Quad quad) {
 }
 
 void MIPSGenerator::BGToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "bgt $s1, $s2, %s\n", quad.dst.c_str());
 }
 
 void MIPSGenerator::BGEToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "bge $s1, $s2, %s\n", quad.dst.c_str());
 }
 
 void MIPSGenerator::BLToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "blt $s1, $s2, %s\n", quad.dst.c_str());
 }
 
 void MIPSGenerator::BLEToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "ble $s1, $s2, %s\n", quad.dst.c_str());
 }
 
 void MIPSGenerator::BEQToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "beq $s1, $s2, %s\n", quad.dst.c_str());
 }
 
 void MIPSGenerator::BNEToMIPS(Quad quad) {
-    getSrcToMIPS(quad.src1, 1);
     getSrcToMIPS(quad.src2, 2);
+    getSrcToMIPS(quad.src1, 1);
     sprintf(MIPSTextCode[MIPSTextLine++], "bne $s1, $s2, %s\n", quad.dst.c_str());
 }
 
