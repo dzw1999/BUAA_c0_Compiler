@@ -12,6 +12,7 @@
 
 #define MAX_MIPS_LENGTH 8000
 #define MAX_MIPS_DATA_CODE 800
+#define MAX_MIPS_CODE_LENGTH 200
 
 class MIPSGenerator {
 public:
@@ -24,7 +25,7 @@ private:
     StackManager stackManager;
     ExceptionHandler exceptionHandler;
     FILE *MIPSFile;
-    char MIPSTextCode[MAX_MIPS_LENGTH][100], MIPSDataCode[MAX_MIPS_DATA_CODE][100];
+    char MIPSTextCode[MAX_MIPS_LENGTH][MAX_MIPS_CODE_LENGTH], MIPSDataCode[MAX_MIPS_DATA_CODE][MAX_MIPS_CODE_LENGTH];
     int MIPSTextLine, MIPSDataLine;
 
     void generateMIPSOfQuad(Quad quad);
