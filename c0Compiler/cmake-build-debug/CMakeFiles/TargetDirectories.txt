@@ -1,3 +1,0 @@
-/home/andyson/BUAA_c0_Compiler/c0Compiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/andyson/BUAA_c0_Compiler/c0Compiler/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/andyson/BUAA_c0_Compiler/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir

@@ -12,17 +12,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f82831ad-77ec-4490-8aa2-ed5c5c4cfafe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/16061067_test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/16061067_test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/ExceptionHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/ExceptionHandler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/ExceptionHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/ExceptionHandler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/C0Compiler" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/C0Compiler" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Grammar Analysis.txt" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Grammar Analysis.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/MIPS code.asm" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/MIPS code.asm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Quadruple.txt" beforeDir="false" afterPath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Quadruple.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/C0Compiler" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/C0Compiler.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/3.12.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/CXX.includecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/C0Compiler.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/feature_tests.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/feature_tests.cxx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Grammar Analysis.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/MIPS code.asm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/Quadruple.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c0Compiler/cmake-build-debug/cmake_install.cmake" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/c0Compiler/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,17 +63,17 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="2" />
-          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="C0Compiler (disassembly)" value="4" />
           <entry key="cpp" value="14" />
-          <entry key="gitignore" value="1" />
+          <entry key="gitignore" value="2" />
           <entry key="h" value="12" />
           <entry key="md" value="1" />
           <entry key="txt" value="3" />
@@ -58,12 +84,13 @@
           <entry key="CMakeLists.txt" value="2" />
           <entry key="Disassembly" value="4" />
           <entry key="ObjectiveC" value="26" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="cpp" value="835" />
+          <entry key="gitignore" value="56" />
           <entry key="h" value="40" />
           <entry key="mm" value="8" />
           <entry key="txt" value="166" />
@@ -72,27 +99,18 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ObjectiveC" value="883" />
-          <entry key="PLAIN_TEXT" value="166" />
+          <entry key="PLAIN_TEXT" value="222" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="163" column="127" selection-start-line="163" selection-start-column="127" selection-end-line="163" selection-end-column="127" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="62" column="54" selection-start-line="62" selection-start-column="54" selection-end-line="62" selection-end-column="54" />
+            <state relative-caret-position="1037">
+              <caret line="61" column="31" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
               <folding>
                 <element signature="e#41#58#0" expanded="true" />
               </folding>
@@ -103,7 +121,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/MIPSGenerator.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-408">
+            <state relative-caret-position="153">
               <caret line="9" column="13" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="13" />
             </state>
           </provider>
@@ -121,7 +139,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
+            <state relative-caret-position="799">
               <caret line="47" selection-start-line="47" selection-end-line="47" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
@@ -133,7 +151,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/MIPSGenerator.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="170">
               <caret line="10" column="26" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="26" />
             </state>
           </provider>
@@ -154,7 +172,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/ExceptionHandler.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
+            <state relative-caret-position="340">
               <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="27" />
               <folding>
                 <element signature="e#42#71#0" expanded="true" />
@@ -166,7 +184,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
+            <state relative-caret-position="714">
               <caret line="42" column="9" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
             </state>
           </provider>
@@ -177,6 +195,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
               <caret line="11" column="12" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
             </state>
           </provider>
         </entry>
@@ -205,6 +232,7 @@
         <option value="$PROJECT_DIR$/c0Compiler/ExceptionHandler.cpp" />
         <option value="$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp" />
         <option value="$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -225,7 +253,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -242,6 +269,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -291,11 +319,12 @@
       <workItem from="1544927780888" duration="4053000" />
       <workItem from="1544939978222" duration="246000" />
       <workItem from="1544954629579" duration="5711000" />
+      <workItem from="1545057601244" duration="168000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10010000" />
+    <option name="totallyTimeSpent" value="10178000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -307,10 +336,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="79" y="25" width="1841" height="1055" extended-state="6" />
+    <frame x="79" y="25" width="2481" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2551532" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25749487" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -355,16 +384,6 @@
           <url>file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp</url>
           <line>87</line>
           <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp</url>
-          <line>148</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp</url>
-          <line>159</line>
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp</url>
@@ -426,9 +445,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/c0Compiler/StackManager.h">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -454,34 +470,51 @@
     <entry file="file://$PROJECT_DIR$/c0Compiler/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/16061067_test.txt">
+    <entry file="file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="12" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="12" />
+        <state relative-caret-position="357">
+          <caret line="163" column="127" selection-start-line="163" selection-start-column="127" selection-end-line="163" selection-end-column="127" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1037">
+          <caret line="61" column="31" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+          <folding>
+            <element signature="e#41#58#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/c0Compiler/MIPSGenerator.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-408">
+        <state relative-caret-position="153">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/c0Compiler/MIPSGenerator.h">
+    <entry file="file://$PROJECT_DIR$/c0Compiler/ExceptionHandler.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="10" column="26" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="26" />
+        <state relative-caret-position="306">
+          <caret line="18" column="57" selection-start-line="18" selection-start-column="57" selection-end-line="18" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/c0Compiler/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
+        <state relative-caret-position="799">
           <caret line="47" selection-start-line="47" selection-end-line="47" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/c0Compiler/MIPSGenerator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="26" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -497,7 +530,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/c0Compiler/ExceptionHandler.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
+        <state relative-caret-position="340">
           <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="27" />
           <folding>
             <element signature="e#42#71#0" expanded="true" />
@@ -505,34 +538,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/c0Compiler/ExceptionHandler.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="57" selection-start-line="18" selection-start-column="57" selection-end-line="18" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/c0Compiler/LexicalAnalyzer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="62" column="54" selection-start-line="62" selection-start-column="54" selection-end-line="62" selection-end-column="54" />
-          <folding>
-            <element signature="e#41#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
+        <state relative-caret-position="714">
           <caret line="42" column="9" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/c0Compiler/GrammarAnalyzer.cpp">
+    <entry file="file://$PROJECT_DIR$/16061067_test.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="163" column="127" selection-start-line="163" selection-start-column="127" selection-end-line="163" selection-end-column="127" />
+        <state relative-caret-position="187">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>

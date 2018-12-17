@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Debug Folder
+./c0Compiler/cmake-bulid-debug
