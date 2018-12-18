@@ -1,13 +1,7 @@
-const int a = &^&^&;
-
-int 3r;
-
-int f1(){
-    return (1);
-}
-
+const int a = 4;
 void main(){
-    int &r;
-    4r = 3r;
+    int r;
+	char t;
+	t = a;
     printf["no");
 }

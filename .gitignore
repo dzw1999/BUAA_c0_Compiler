@@ -34,3 +34,9 @@
 # Debug Folder
 ./c0Compiler/cmake-bulid-debug
 ./idea
+./c0Compiler/bin
+./c0Compiler/obj
+./c0Compiler/compiler.*
+./c0Compiler/Grammar Analysis.txt
+./c0Compiler/MIPS code.asm
+./c0Compiler/Quadruple.txt
