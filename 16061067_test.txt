@@ -1,19 +1,7 @@
 const int a = 4;
-
- int 3r;
-
- int f1(){
-     return (1);
- }
-
- void main(){
- void main(){
-     int &r;
-     int r;
-     4r = 3r;
- 	char t;
- 	t = a;
-     printf["no");
-     printf["no");
- }
- }
+void main(){
+    int r;
+	char t;
+	t = a;
+    printf["no");
+}
