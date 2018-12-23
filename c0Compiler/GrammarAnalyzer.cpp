@@ -766,6 +766,9 @@ void GrammarAnalyzer::assignStatement() {
         if (identType == CHAR_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
             ERROR(56);
         }
+        if (identType == INT_TYPE && exprType != INT_ARRAY_TYPE && exprType != INT_TYPE) {
+            ERROR(56);
+        }
         semanticAnalyzer.assign(ident, value, identType, exprType);
         printmsg("line %d, This is an assign statement.\n", SYM_LINE);
         return;
@@ -792,6 +795,9 @@ void GrammarAnalyzer::assignStatement() {
         expression(value, exprType, variable);
         //类型检验
         if (identType == CHAR_ARRAY_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
+            ERROR(56);
+        }
+        if (identType == INT_ARRAY_TYPE && exprType != INT_ARRAY_TYPE && exprType != INT_TYPE) {
             ERROR(56);
         }
         semanticAnalyzer.assignToArray(ident, offset, value, identType, exprType);

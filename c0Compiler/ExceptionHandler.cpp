@@ -68,7 +68,7 @@ void ExceptionHandler::error(int errorCode, int line, string symbol) {
             "Unknown quadruple operator",
             "In MIPS generating: Cannot find in symbol table",
             "Illegal symbol",                                                       //55
-            "Cannot assign a non-character to a CHAR-TYPE VARIABLE",
+            "Cannot assign an invalid type value to a varible",
             "Expected an index when assigning an array"
     };
     errorCnt++;
