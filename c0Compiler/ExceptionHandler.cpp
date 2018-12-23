@@ -69,7 +69,8 @@ void ExceptionHandler::error(int errorCode, int line, string symbol) {
             "In MIPS generating: Cannot find in symbol table",
             "Illegal symbol",                                                       //55
             "Cannot assign an invalid type value to a varible",
-            "Expected an index when assigning an array"
+            "Expected an index when assigning an array",
+            "Type mismatched"
     };
     errorCnt++;
     if(errorCode == 37)

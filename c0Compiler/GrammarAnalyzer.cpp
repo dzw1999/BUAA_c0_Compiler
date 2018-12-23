@@ -626,6 +626,7 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
     } else if (SYM_TYPE == LEFT_BRACKET) {
         GET_SYM;
         expression(rtn_factor, type, variable);
+        type = INT_TYPE;
         if (SYM_TYPE == RIGHT_BRACKET) {
             GET_SYM;
             printmsg("line %d, This is a factor.\n", SYM_LINE);
@@ -834,6 +835,9 @@ void GrammarAnalyzer::condition(symbolType &comparator, string &src1, string &sr
     valueType type1, type2;
     bool variable1, variable2;
     expression(src1, type1, variable1);
+    if(type1 == CHAR_TYPE || type1 == CHAR_ARRAY_TYPE){
+        ERROR(58);
+    }
     if (SYM_TYPE == EQUAL ||
         SYM_TYPE == LESS_EQUAL ||
         SYM_TYPE == GREATER_EQUAL ||
@@ -843,6 +847,9 @@ void GrammarAnalyzer::condition(symbolType &comparator, string &src1, string &sr
         comparator = SYM_TYPE;
         GET_SYM;
         expression(src2, type2, variable2);
+        if(type2 == CHAR_TYPE || type2 == CHAR_ARRAY_TYPE){
+            ERROR(58);
+        }
     } else {
         comparator = UNEQUAL;
         src2 = "0";
@@ -1008,6 +1015,9 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
         if (paraSte.parameter != parameterOrder) {
             ERROR(40);
         }
+        if (paraSte.vType != type){
+            ERROR(58);
+        }
         semanticAnalyzer.valueParameter(rtn_expr);
         while (SYM_TYPE == COMMA) {
             GET_SYM;
@@ -1017,6 +1027,9 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
             symTableEntry paraSte = symbolTable.searchInTable(parameterOrder, callingFunction);
             if (paraSte.parameter != parameterOrder) {
                 ERROR(40);
+            }
+            if (paraSte.vType != type){
+                ERROR(58);
             }
             semanticAnalyzer.valueParameter(rtn_expr);
         }
