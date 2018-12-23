@@ -1,13 +1,19 @@
-const int a = &^&^&;
+const int a = 4;
 
-int 3r;
+ int 3r;
 
-int f1(){
-    return (1);
-}
+ int f1(){
+     return (1);
+ }
 
-void main(){
-    int &r;
-    4r = 3r;
-    printf["no");
-}
+ void main(){
+ void main(){
+     int &r;
+     int r;
+     4r = 3r;
+ 	char t;
+ 	t = a;
+     printf["no");
+     printf["no");
+ }
+ }
