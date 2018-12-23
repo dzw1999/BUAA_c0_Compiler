@@ -503,7 +503,7 @@ void GrammarAnalyzer::parameter(int cnt) {
     GET_SYM;
 }
 
-void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variable, bool isSwitch) {
+void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variable, int &staticValue, bool isSwitch) {
     bool neg = false;
     string src1, src2, dst;
     valueType src2Type;
@@ -515,7 +515,7 @@ void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variab
         neg = true;
         GET_SYM;
     }
-    term(dst, type, variable);
+    term(dst, type, variable, staticValue);
     printmsg("line %d, This is an expression.\n", SYM_LINE);
     if (neg) {
         src1 = dst;
@@ -530,8 +530,9 @@ void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variab
         GET_SYM;
         variable = false;
         src1 = dst;
-        term(src2, src2Type, src2Variable);
+        term(src2, src2Type, src2Variable, staticValue);
         type = INT_TYPE;
+        staticValue = NULL;
         if (op == '+') {
             semanticAnalyzer.add(src1, src2, dst);
         } else {
@@ -544,12 +545,12 @@ void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variab
     rtn_expr = dst;
 }
 
-void GrammarAnalyzer::term(string &rtn_term, valueType &type, bool &variable) {
+void GrammarAnalyzer::term(string &rtn_term, valueType &type, bool &variable, int &staticValue) {
     string src1, src2, dst;
     valueType src2Type;
     bool src2Variable;
     char op;
-    factor(dst, type, variable);
+    factor(dst, type, variable, staticValue);
     printmsg("line %d, This is a term.\n", SYM_LINE);
     while (SYM_TYPE == ASTERISK || SYM_TYPE == SLASH) {
         if (SYM_TYPE == ASTERISK) {
@@ -560,8 +561,9 @@ void GrammarAnalyzer::term(string &rtn_term, valueType &type, bool &variable) {
         GET_SYM;
         variable = false;
         src1 = dst;
-        factor(src2, src2Type, src2Variable);
+        factor(src2, src2Type, src2Variable, staticValue);
         type = INT_TYPE;
+        staticValue = NULL;
         if (op == '*') {
             semanticAnalyzer.mult(src1, src2, dst);
         } else {
@@ -572,10 +574,12 @@ void GrammarAnalyzer::term(string &rtn_term, valueType &type, bool &variable) {
     rtn_term = dst;
 }
 
-void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable) {
+void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable, int &staticValue) {
     string index;
     valueType exprType;
     bool exprVariable;
+    staticValue = NULL;
+    int exprStaticValue;
     if (SYM_TYPE == IDENTIFIER) {
         string ident = SYM;
         //查表
@@ -591,8 +595,10 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
             }
 
             GET_SYM;
-            expression(index, exprType, exprVariable);
-
+            expression(index, exprType, exprVariable, exprStaticValue);
+            if (exprStaticValue != NULL && (exprStaticValue >= ste.length || exprStaticValue < 0)){
+                ERROR(60);
+            }
             if (SYM_TYPE != RIGHT_SQUARE) {
                 ERROR(14);
             }
@@ -625,7 +631,7 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
         }
     } else if (SYM_TYPE == LEFT_BRACKET) {
         GET_SYM;
-        expression(rtn_factor, type, variable);
+        expression(rtn_factor, type, variable, staticValue);
         type = INT_TYPE;
         if (SYM_TYPE == RIGHT_BRACKET) {
             GET_SYM;
@@ -642,9 +648,11 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
         GET_SYM;
         printmsg("line %d, This is a factor.\n", SYM_LINE);
     } else if (SYM_TYPE == PLUS || SYM_TYPE == MINUS || SYM_TYPE == UNSIGN_NUMBER) {
+        bool nag = SYM_TYPE == MINUS;
         rtn_factor = to_string(integer());
         type = INT_TYPE;
         variable = false;
+        staticValue = nag ? -1 * atoi(rtn_factor.c_str()) : atoi(rtn_factor.c_str());
         printmsg("line %d, This is a factor.\n", SYM_LINE);
     } else {
         ERROR(16);
@@ -742,6 +750,7 @@ void GrammarAnalyzer::assignStatement() {
     valueType offsetType;
     bool variable;       // 表达式是否为变量表达式
     bool offsetVariable;
+    int staticValue;
     if (SYM_TYPE != IDENTIFIER) {
         ERROR(8);
     }
@@ -762,7 +771,7 @@ void GrammarAnalyzer::assignStatement() {
             ERROR(57);
         }
         GET_SYM;
-        expression(value, exprType, variable);
+        expression(value, exprType, variable, staticValue);
         //类型检验
         if (identType == CHAR_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
             ERROR(56);
@@ -780,7 +789,11 @@ void GrammarAnalyzer::assignStatement() {
         }
         GET_SYM;
         identType = ste.vType;
-        expression(offset, offsetType, offsetVariable);
+        expression(offset, offsetType, offsetVariable, staticValue);
+        if (staticValue != NULL && (staticValue >= ste.length || staticValue < 0)){
+            ERROR(60);
+        }
+
         if (SYM_TYPE != RIGHT_SQUARE) {
             ERROR(13);
         }
@@ -793,7 +806,7 @@ void GrammarAnalyzer::assignStatement() {
             ERROR(46);
         }
         GET_SYM;
-        expression(value, exprType, variable);
+        expression(value, exprType, variable, staticValue);
         //类型检验
         if (identType == CHAR_ARRAY_TYPE && exprType != CHAR_ARRAY_TYPE && exprType != CHAR_TYPE) {
             ERROR(56);
@@ -834,7 +847,8 @@ void GrammarAnalyzer::ifStatement() {
 void GrammarAnalyzer::condition(symbolType &comparator, string &src1, string &src2) {
     valueType type1, type2;
     bool variable1, variable2;
-    expression(src1, type1, variable1);
+    int staticValue1, staticValue2;
+    expression(src1, type1, variable1, staticValue1);
     if(type1 == CHAR_TYPE || type1 == CHAR_ARRAY_TYPE){
         ERROR(58);
     }
@@ -846,7 +860,7 @@ void GrammarAnalyzer::condition(symbolType &comparator, string &src1, string &sr
         SYM_TYPE == UNEQUAL) {
         comparator = SYM_TYPE;
         GET_SYM;
-        expression(src2, type2, variable2);
+        expression(src2, type2, variable2, staticValue2);
         if(type2 == CHAR_TYPE || type2 == CHAR_ARRAY_TYPE){
             ERROR(58);
         }
@@ -887,6 +901,7 @@ void GrammarAnalyzer::switchStatement() {
     string value;
     valueType type;
     bool variable;
+    int staticValue;
     string switchEndLabel = semanticAnalyzer.newLabel("switch_end");
     if (SYM_TYPE != SWITCH) {
         ERROR(22);
@@ -896,7 +911,7 @@ void GrammarAnalyzer::switchStatement() {
         ERROR(3);
     }
     GET_SYM;
-    expression(value, type, variable, true);
+    expression(value, type, variable, staticValue, true);
     if(type == INT_TYPE || type == INT_ARRAY_TYPE)
         type = INT_TYPE;
     else if(type == CHAR_TYPE || type == CHAR_ARRAY_TYPE)
@@ -1013,13 +1028,14 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
     string rtn_expr;
     valueType type;
     bool variable;
+    int staticValue;
     if (SYM_TYPE == PLUS ||
         SYM_TYPE == MINUS ||
         SYM_TYPE == IDENTIFIER ||
         SYM_TYPE == LEFT_BRACKET ||
         SYM_TYPE == UNSIGN_NUMBER ||
         SYM_TYPE == CHARATER) {
-        expression(rtn_expr, type, variable);
+        expression(rtn_expr, type, variable, staticValue);
         parameterOrder++;
         //查表 对照形参实参
         symTableEntry paraSte = symbolTable.searchInTable(parameterOrder, callingFunction);
@@ -1032,7 +1048,7 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
         semanticAnalyzer.valueParameter(rtn_expr);
         while (SYM_TYPE == COMMA) {
             GET_SYM;
-            expression(rtn_expr, type, variable);
+            expression(rtn_expr, type, variable, staticValue);
             parameterOrder++;
             //查表 对照形参实参
             symTableEntry paraSte = symbolTable.searchInTable(parameterOrder, callingFunction);
@@ -1110,6 +1126,7 @@ void GrammarAnalyzer::printfStatement() {
     string rtn_expr;
     valueType type;
     bool variable;
+    int staticValue;
     if (SYM_TYPE != PRINTF) {
         ERROR(28);
     }
@@ -1131,7 +1148,7 @@ void GrammarAnalyzer::printfStatement() {
         GET_SYM;
         if (SYM_TYPE == COMMA) {
             GET_SYM;
-            expression(rtn_expr, type, variable);
+            expression(rtn_expr, type, variable, staticValue);
             semanticAnalyzer.write(type, rtn_expr);
             if (SYM_TYPE == RIGHT_BRACKET) {
                 printmsg("line %d, This is printf statement.\n", SYM_LINE);
@@ -1151,7 +1168,7 @@ void GrammarAnalyzer::printfStatement() {
                SYM_TYPE == LEFT_BRACKET ||
                SYM_TYPE == UNSIGN_NUMBER ||
                SYM_TYPE == CHARATER) {
-        expression(rtn_expr, type, variable);
+        expression(rtn_expr, type, variable, staticValue);
         semanticAnalyzer.write(type, rtn_expr);
         if (SYM_TYPE == RIGHT_BRACKET) {
             printmsg("line %d, This is printf statement.\n", SYM_LINE);
@@ -1169,6 +1186,7 @@ void GrammarAnalyzer::returnStatement() {
     string rtn_expr;
     valueType type;
     bool variable;
+    int staticValue;
     if (SYM_TYPE != RETURN) {
         ERROR(32);
     }
@@ -1192,7 +1210,7 @@ void GrammarAnalyzer::returnStatement() {
         SYM_TYPE == LEFT_BRACKET ||
         SYM_TYPE == UNSIGN_NUMBER ||
         SYM_TYPE == CHARATER) {
-        expression(rtn_expr, type, variable);
+        expression(rtn_expr, type, variable, staticValue);
         if (SYM_TYPE != RIGHT_BRACKET) {
             ERROR(4);
         }

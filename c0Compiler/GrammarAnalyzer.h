@@ -51,9 +51,9 @@ private:
     void compoundStatement();
     int parameterList();
     void parameter(int cnt);
-    void expression(string &rtn_expr, valueType &type, bool &variable, bool isSwitch = false);
-    void term(string &rtn_term, valueType &type, bool &variable);
-    void factor(string &rtn_factor, valueType &type, bool &variable);
+    void expression(string &rtn_expr, valueType &type, bool &variable, int &staticValue, bool isSwitch = false);
+    void term(string &rtn_term, valueType &type, bool &variable, int &staticValue);
+    void factor(string &rtn_factor, valueType &type, bool &variable, int &staticValue);
     void statement();
     void assignStatement();
     void ifStatement();

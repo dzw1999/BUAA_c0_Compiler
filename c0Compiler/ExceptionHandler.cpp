@@ -71,7 +71,8 @@ void ExceptionHandler::error(int errorCode, int line, string symbol) {
             "Cannot assign an invalid type value to a varible",
             "Expected an index when assigning an array",
             "Type mismatched",
-            "Invalid return value type"
+            "Invalid return value type",
+            "Index out of range"                                                    //60
     };
     errorCnt++;
     if(errorCode == 37)
