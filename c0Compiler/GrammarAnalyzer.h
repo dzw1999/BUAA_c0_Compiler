@@ -60,8 +60,8 @@ private:
     void condition(symbolType &comparator, string &src1, string &src2);
     void whileStatement();
     void switchStatement();
-    void caseList(const string &src1, const string &switchEndLabel);
-    void caseStatement(const string &src1, const string &switchEndLabel);
+    void caseList(const string &src1, const valueType &type, const string &switchEndLabel);
+    void caseStatement(const string &src1, const valueType &type, const string &switchEndLabel);
     void defaultStatement(const string &switchEndLabel);
     void functionCall(string &rtn_func, valueType &type);
     void valueParameterList(string functionName);

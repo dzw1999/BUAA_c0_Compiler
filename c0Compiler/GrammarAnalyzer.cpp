@@ -897,6 +897,11 @@ void GrammarAnalyzer::switchStatement() {
     }
     GET_SYM;
     expression(value, type, variable, true);
+    if(type == INT_TYPE || type == INT_ARRAY_TYPE)
+        type = INT_TYPE;
+    else if(type == CHAR_TYPE || type == CHAR_ARRAY_TYPE)
+        type == CHAR_TYPE;
+
     if (SYM_TYPE != RIGHT_BRACKET) {
         ERROR(4);
     }
@@ -905,7 +910,7 @@ void GrammarAnalyzer::switchStatement() {
         ERROR(5);
     }
     GET_SYM;
-    caseList(value, switchEndLabel);
+    caseList(value, type, switchEndLabel);
     if (SYM_TYPE == DEFAULT)
         defaultStatement(switchEndLabel);
     if (SYM_TYPE != RIGHT_BRACE) {
@@ -916,27 +921,33 @@ void GrammarAnalyzer::switchStatement() {
     printmsg("line %d, This is switch statement.\n", SYM_LINE);
 }
 
-void GrammarAnalyzer::caseList(const string &src1, const string &switchEndLabel) {
+void GrammarAnalyzer::caseList(const string &src1, const valueType &type, const string &switchEndLabel) {
     do {
-        caseStatement(src1, switchEndLabel);
+        caseStatement(src1, type, switchEndLabel);
     } while (SYM_TYPE == CASE);
     printmsg("line %d, This is case list.\n", SYM_LINE);
 }
 
-void GrammarAnalyzer::caseStatement(const string &src1, const string &switchEndLabel) {
+void GrammarAnalyzer::caseStatement(const string &src1, const valueType &type, const string &switchEndLabel) {
     string src2;
     string endLabel = semanticAnalyzer.newLabel("case_end");
+    valueType caseType;
     if (SYM_TYPE != CASE) {
         ERROR(23);
     }
     GET_SYM;
     if (SYM_TYPE == PLUS || SYM_TYPE == MINUS || SYM_TYPE == UNSIGN_NUMBER) {
         src2 = to_string(integer());
+        caseType = INT_TYPE;
     } else if (SYM_TYPE == CHARATER) {
         src2 = "'" + string(1, SYM[1]) + "'";
+        caseType = CHAR_TYPE;
         GET_SYM;
     } else {
         ERROR(24);
+    }
+    if(caseType != type){
+        ERROR(58);
     }
     if (SYM_TYPE != COLON) {
         ERROR(25);
