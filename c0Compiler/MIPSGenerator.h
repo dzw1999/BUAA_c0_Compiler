@@ -10,8 +10,8 @@
 #include "StackManager.h"
 #include "ExceptionHandler.h"
 
-#define MAX_MIPS_LENGTH 5000
-#define MAX_MIPS_DATA_CODE 500
+#define MAX_MIPS_LENGTH 7000
+#define MAX_MIPS_DATA_CODE 700
 #define MAX_MIPS_CODE_LENGTH 200
 
 class MIPSGenerator {

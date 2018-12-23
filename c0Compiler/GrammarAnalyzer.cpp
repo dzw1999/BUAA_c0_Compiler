@@ -1042,7 +1042,10 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
         if (paraSte.parameter != parameterOrder) {
             ERROR(40);
         }
-        if (paraSte.vType != type){
+        if (paraSte.vType == INT_TYPE && type != INT_TYPE && type != INT_ARRAY_TYPE){
+            ERROR(58);
+        }
+        if (paraSte.vType == CHAR_TYPE && type != CHAR_TYPE && type != CHAR_ARRAY_TYPE){
             ERROR(58);
         }
         semanticAnalyzer.valueParameter(rtn_expr);
@@ -1055,7 +1058,10 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
             if (paraSte.parameter != parameterOrder) {
                 ERROR(40);
             }
-            if (paraSte.vType != type){
+            if (paraSte.vType == INT_TYPE && type != INT_TYPE && type != INT_ARRAY_TYPE){
+                ERROR(58);
+            }
+            if (paraSte.vType == CHAR_TYPE && type != CHAR_TYPE && type != CHAR_ARRAY_TYPE){
                 ERROR(58);
             }
             semanticAnalyzer.valueParameter(rtn_expr);
