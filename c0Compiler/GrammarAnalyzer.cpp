@@ -519,6 +519,7 @@ void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variab
     printmsg("line %d, This is an expression.\n", SYM_LINE);
     if (neg) {
         src1 = dst;
+        staticValue = -staticValue;
         semanticAnalyzer.sub("0", src1, dst);
     }
     while (SYM_TYPE == PLUS || SYM_TYPE == MINUS) {
@@ -915,7 +916,7 @@ void GrammarAnalyzer::switchStatement() {
     if(type == INT_TYPE || type == INT_ARRAY_TYPE)
         type = INT_TYPE;
     else if(type == CHAR_TYPE || type == CHAR_ARRAY_TYPE)
-        type == CHAR_TYPE;
+        type = CHAR_TYPE;
 
     if (SYM_TYPE != RIGHT_BRACKET) {
         ERROR(4);

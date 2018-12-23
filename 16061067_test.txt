@@ -1,7 +1,6 @@
 const int a = 4;
 void main(){
-    int r;
-	char t;
-	t = a;
-    printf["no");
+    int a[2];
+    int x;
+    x = a[-0];
 }
