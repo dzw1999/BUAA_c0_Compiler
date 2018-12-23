@@ -1163,6 +1163,10 @@ void GrammarAnalyzer::returnStatement() {
     }
     GET_SYM;
     if (SYM_TYPE == SEMICOLON) {
+        symTableEntry ste = symbolTable.searchInGlobalTable(currentFunction);
+        if(ste.vType != VOID_TYPE){
+            ERROR(59);
+        }
         printmsg("line %d, This is void return statement.\n", SYM_LINE);
         semanticAnalyzer.returnStatement("");
         return;
@@ -1182,6 +1186,16 @@ void GrammarAnalyzer::returnStatement() {
             ERROR(4);
         }
         GET_SYM;
+        symTableEntry ste = symbolTable.searchInGlobalTable(currentFunction);
+        if(ste.vType == INT_TYPE && type != INT_TYPE && type != INT_ARRAY_TYPE){
+            ERROR(59);
+        }
+        if(ste.vType == CHAR_TYPE && type != CHAR_TYPE && type != CHAR_ARRAY_TYPE){
+            ERROR(59);
+        }
+        if(ste.vType == VOID_TYPE){
+            ERROR(59);
+        }
         semanticAnalyzer.returnStatement(rtn_expr);
         printmsg("line %d, This is return statement.\n", SYM_LINE);
     } else {

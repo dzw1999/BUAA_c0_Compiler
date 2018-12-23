@@ -70,7 +70,8 @@ void ExceptionHandler::error(int errorCode, int line, string symbol) {
             "Illegal symbol",                                                       //55
             "Cannot assign an invalid type value to a varible",
             "Expected an index when assigning an array",
-            "Type mismatched"
+            "Type mismatched",
+            "Invalid return value type"
     };
     errorCnt++;
     if(errorCode == 37)
