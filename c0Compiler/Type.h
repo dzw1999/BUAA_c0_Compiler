@@ -35,6 +35,7 @@ struct symTableEntry{
     int parameter;
     int length;
     int offset;
+    int constValue;
 } ;
 
 typedef map<string, symTableEntry> symTable;
@@ -70,7 +71,6 @@ enum Operator {
     WI,     // 写整数
     WC,     // 写字符
     VAR_DECLARE,        //变量声明
-    CONST_DECLARE,      //常量声明
     MAIN_FUNCTION_DEFINE,    //main函数定义
     FUNCTION_DEFINE,    //函数定义
     FUNCTION_END,       //函数定义结束

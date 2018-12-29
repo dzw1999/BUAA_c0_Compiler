@@ -14,7 +14,6 @@ public:
 
     const string newLabel(const string &label);
     //生成四元式的语义动作函数
-    void constDefine(symbolType type, const string ident, const string &value, bool global);
     void varDefine(symbolType type, const string ident, int length, bool global);
     void mainFunctionDefine(valueType vType, const string ident);
     void functionDefine(valueType vType, const string ident);

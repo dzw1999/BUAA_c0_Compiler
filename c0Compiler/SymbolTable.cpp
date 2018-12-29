@@ -9,13 +9,14 @@ SymbolTable &SymbolTable::getSymbolTable() {
     return instance;
 }
 
-symTableEntry SymbolTable::createSte(objectType oType, valueType vType, int length, int parameter) {
+symTableEntry SymbolTable::createSte(objectType oType, valueType vType, int length, int parameter, int constValue) {
     symTableEntry Ste;
     Ste.oType = oType;
     Ste.vType = vType;
     Ste.length = length;
     Ste.parameter = parameter;
     Ste.offset = length;
+    Ste.constValue = constValue;
     return Ste;
 }
 

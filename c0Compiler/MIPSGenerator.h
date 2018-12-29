@@ -56,20 +56,19 @@ private:
     void WIToMIPS(Quad quad);
     void WCToMIPS(Quad quad);
     void VAR_DECLAREToMIPS(Quad quad);
-    void CONST_DECLAREToMIPS(Quad quad);
     void MAIN_FUNCTION_DEFINEToMIPS(Quad quad);
     void FUNCTION_DEFINEToMIPS(Quad quad);
     void PARAMETERToMIPS(Quad quad);
     void FUNCTION_ENDToMIPS(Quad quad);
 
-    void getAddrtoMIPS(string src, int getSrc, bool &global);
+    void getAddrToMIPS(string src, int getSrc, bool &global);
     void getSrcToMIPS(string src, int quadSrc);
     void writeDst(string dst);
     void getLocal(int offset, int quadSrc);
     void getGlobal(int offset, int quadSrc);
     void getParameter(int paraNum,int paraOrder, int quadSrc);
     void getConst(string src, int quadSrc);
-    void getString(string src, int quadSrc);
+    void getConst(symTableEntry ste, int quadSrc);
     void writeLocal(int offset);
     void writeGlobal(int offset);
     void writeParameter(int paraNum,int paraOrder);

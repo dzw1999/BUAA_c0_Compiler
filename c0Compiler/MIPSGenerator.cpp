@@ -21,13 +21,6 @@ MIPSGenerator::getMIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolT
 
 void MIPSGenerator::generateMIPS() {
     for (int i = 0; i < quadruple.length(); ++i) {
-        string out;
-        quadruple.toString(quadruple.quadrupleList[i], out);
-//        printf("start process quad: %s\n", out.c_str());
-//        printf("%d\n", quadruple.quadrupleList[i].op);
-//        printf("%s\n", quadruple.quadrupleList[i].dst.c_str());
-//        printf("%s\n", quadruple.quadrupleList[i].src1.c_str());
-//        printf("%s\n", quadruple.quadrupleList[i].src2.c_str());
         generateMIPSOfQuad(quadruple.quadrupleList[i]);
     }
     fprintf(MIPSFile, ".data\n");
@@ -149,10 +142,6 @@ void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
             VAR_DECLAREToMIPS(quad);
             break;
         }
-        case CONST_DECLARE: {
-            CONST_DECLAREToMIPS(quad);
-            break;
-        }
         case MAIN_FUNCTION_DEFINE: {
             MAIN_FUNCTION_DEFINEToMIPS(quad);
             break;
@@ -250,7 +239,7 @@ void MIPSGenerator::ARASToMIPS(Quad quad) {
     sprintf(MIPSTextCode[MIPSTextLine++], "#assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(),
             quad.src1.c_str());
     bool global = false;
-    getAddrtoMIPS(quad.dst, 2, global);
+    getAddrToMIPS(quad.dst, 2, global);
     //value
     getSrcToMIPS(quad.src1, 1);
     //存数组基地址
@@ -258,7 +247,7 @@ void MIPSGenerator::ARASToMIPS(Quad quad) {
     //index
     getSrcToMIPS(quad.src2, 2);
     sprintf(MIPSTextCode[MIPSTextLine++], "sll $s2, $s2, 2\n");
-    if(!global)
+    if (!global)
         sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $t1, $s2\n");
     else
         sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $t1, $s2\n");
@@ -272,11 +261,11 @@ void MIPSGenerator::GARToMIPS(Quad quad) {
             quad.src2.c_str());
     bool global = false;
     //arrname
-    getAddrtoMIPS(quad.src1, 1, global);
+    getAddrToMIPS(quad.src1, 1, global);
     //index
     getSrcToMIPS(quad.src2, 2);
     sprintf(MIPSTextCode[MIPSTextLine++], "sll $s2, $s2, 2\n");
-    if(!global)
+    if (!global)
         sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $s1, $s2\n");
     else
         sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $s1, $s2\n");
@@ -469,21 +458,6 @@ void MIPSGenerator::VAR_DECLAREToMIPS(Quad quad) {
     }
 }
 
-void MIPSGenerator::CONST_DECLAREToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#const define:  %s\n", quad.dst.c_str());
-    if (quad.global) {
-        sprintf(MIPSDataCode[MIPSDataLine++], "%s: .space 4\n", quad.dst.c_str());
-        getSrcToMIPS(quad.src2, 1);
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $0, $s1\n");
-        sprintf(MIPSTextCode[MIPSTextLine++], "sw $t0, %s\n", quad.dst.c_str());
-    } else {
-        getSrcToMIPS(quad.src2, 1);
-        sprintf(MIPSTextCode[MIPSTextLine++], "sw $s%d, ($sp)\n", 1);
-        sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
-    }
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end const define:  %s\n", quad.dst.c_str());
-}
-
 void MIPSGenerator::MAIN_FUNCTION_DEFINEToMIPS(Quad quad) {
     //贴标签
     sprintf(MIPSTextCode[MIPSTextLine++], "\n%s:\n", quad.dst.c_str());
@@ -518,7 +492,7 @@ void MIPSGenerator::FUNCTION_ENDToMIPS(Quad quad) {
     RETToMIPS(q);
 }
 
-void MIPSGenerator::getAddrtoMIPS(string src, int getSrc, bool &global) {
+void MIPSGenerator::getAddrToMIPS(string src, int getSrc, bool &global) {
     symTableEntry ste = symbolTable.searchInLocalTable(src, stackManager.functionStack.top());
     symTableEntry gloSte = symbolTable.searchInGlobalTable(src);
     if (ste.oType != FAULT) {
@@ -540,7 +514,7 @@ void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
         sprintf(MIPSTextCode[MIPSTextLine++], "#enter\n");
     }
 
-    if (src[0] == '\'' || src[0] == '"' || isdigit(src[0]) || src[0] == '-' || src[0] == '+') {
+    if (src[0] == '\'' || isdigit(src[0]) || src[0] == '-' || src[0] == '+') {
         getConst(src, quadSrc);
         return;
     }
@@ -548,18 +522,27 @@ void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
     symTableEntry gloSte = symbolTable.searchInGlobalTable(src);
     int MIPSOffset = (ste.offset + 2) * 4;
     if (ste.oType != FAULT) {
-        if (ste.parameter == 0)
-            getLocal(MIPSOffset, quadSrc);
-        else {
+        //获取参数
+        if (ste.oType == PARAMETER && ste.parameter != 0) {
             symTableEntry funSte = symbolTable.searchInGlobalTable(stackManager.functionStack.top());
             if (funSte.oType == FAULT) {
                 ERROR(54);
             }
             getParameter(funSte.parameter, ste.parameter, quadSrc);
+
+        } else if (ste.oType == CONSTANT) {   //获取局部常量
+            getConst(ste, quadSrc);
+        } else {        //获取局部变量
+            getLocal(MIPSOffset, quadSrc);
         }
     } else if (gloSte.oType != FAULT) {
-        getGlobal(gloSte.offset * 4, quadSrc);
+        if (gloSte.oType == CONSTANT) {
+            getConst(gloSte, quadSrc);
+        } else {        //获取全局变量
+            getGlobal(gloSte.offset * 4, quadSrc);
+        }
     } else {
+        //取栈顶
         sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, 4\n");
         sprintf(MIPSTextCode[MIPSTextLine++], "lw $s%d, ($sp)\n", quadSrc);
     }
@@ -622,24 +605,15 @@ void MIPSGenerator::getConst(string src, int quadSrc) {
     if (src[0] == '\'') {
         sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
         sprintf(MIPSTextCode[MIPSTextLine++], "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, (int) src[1]);
-    } else if (src[0] == '"') {
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
-        sprintf(MIPSTextCode[MIPSTextLine++], "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, (int) '\n');
-    } else {
+    } else if (src[0] == '+' || src[0] == '-' || isdigit(src[0])) {
         sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
         sprintf(MIPSTextCode[MIPSTextLine++], "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, atoi(src.c_str()));
     }
 }
 
-void MIPSGenerator::getString(string src, int quadSrc) {
-    static string str = "str";
-    static int strCnt = 0;
-    if (src[0] == '\"') {
-        sprintf(MIPSDataCode[MIPSDataLine++], "%s: .asciiz \"%s\"\n", str.append(to_string(strCnt++)).c_str(),
-                src.c_str());
-        sprintf(MIPSTextCode[MIPSTextLine++], "la $s%d, %s\n", quadSrc, src.c_str());
-
-    }
+void MIPSGenerator::getConst(symTableEntry ste, int quadSrc) {
+    sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
+    sprintf(MIPSTextCode[MIPSTextLine++], "addi $s%d, $s%d, %d\n", quadSrc, quadSrc, ste.constValue);
 }
 
 void MIPSGenerator::writeLocal(int offset) {

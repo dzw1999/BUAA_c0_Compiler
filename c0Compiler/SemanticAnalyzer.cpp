@@ -26,13 +26,6 @@ const string SemanticAnalyzer::newLabel(const string &label) {
     return newLab;
 }
 
-void SemanticAnalyzer::constDefine(symbolType type, string ident, const string &value, bool global) {
-    Operator op = CONST_DECLARE;
-    string src1 = type == INT ? "int" : "char";
-    string src2 = value;
-    quadruple.addQuadruple(op, ident, src1, src2, global);
-}
-
 void SemanticAnalyzer::varDefine(symbolType type, string ident, int length, bool global) {
     Operator op = VAR_DECLARE;
     string src1 = type == INT ? "int" : "char";

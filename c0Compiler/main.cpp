@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
     if (argc > 1)
         fileName = argv[1];
     else
+        printf("Please input a file path:\n");
         cin >> fileName;
     FILE *fin = fopen((fileName).c_str(), "r");
     if (fin == NULL) {
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]) {
     FILE *quadrupleOut = fopen("Quadruple.txt", "w");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
 
-    printf("start compiling...\n");
+    printf("Start compiling...\n");
 
     ExceptionHandler exceptionHandler = ExceptionHandler::getExceptionHandler();
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
     lexicalAnalyzer.lexicalAnalyze(); // 词法分析
 
     if (grammarAnalyzer.grammarAnalyze() == 1)    // 语法分析(语义分析伴随语法分析)
-        printf("Exception occured in grammar analysis.\n");
+        printf("Exception occurred in grammar analysis.\n");
     else
         printf("Grammar analysis Succeeded.\n");
 

@@ -1,6 +1,8 @@
 const int a = 4;
 void main(){
-    int a[2];
+    int arr[2];
     int x;
-    x = a[-0];
+    arr[0] = a + 3;
+    x = arr[0];
+    printf(x);
 }

@@ -15,7 +15,7 @@ using namespace std;
 class SymbolTable {
 public:
     static SymbolTable &getSymbolTable();  // 单例设计模式
-    symTableEntry createSte(objectType oType,valueType vType, int length = 0, int parameter = 0);
+    symTableEntry createSte(objectType oType,valueType vType, int length = 0, int parameter = 0, int constValue = 0);
 
     bool addToTable(string ident, symTableEntry Ste, string funcName = "");
     symTableEntry searchInTable(string ident, string funcName);
