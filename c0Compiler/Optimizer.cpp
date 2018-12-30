@@ -24,7 +24,9 @@ void Optimizer::globalRegisterOptimize() {
 }
 
 void Optimizer::splitIntoBasicBlock() {
-    for(int i=0;i<originQuadruple.length(););
+    for(int i=0;i<originQuadruple.length();i++){
+
+    }
 }
 
 Optimizer::Optimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple)
