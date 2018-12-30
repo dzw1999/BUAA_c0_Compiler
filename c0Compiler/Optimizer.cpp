@@ -10,6 +10,7 @@ Optimizer &Optimizer::getOptimizer(Quadruple theOriginQuadruple, Quadruple theOp
 }
 
 void Optimizer::optimize() {
+
     if(globalRegisterOption){
         //globalRegisterOptimize();
     }
@@ -22,7 +23,12 @@ void Optimizer::globalRegisterOptimize() {
 
 }
 
+void Optimizer::splitIntoBasicBlock() {
+    for(int i=0;i<originQuadruple.length(););
+}
+
 Optimizer::Optimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple)
         : originQuadruple(theOriginQuadruple), optimizedQuadruple(theOptimizedQuadruple) {
-
+    currentEntry = 1;
+    currentExit = 1;
 }

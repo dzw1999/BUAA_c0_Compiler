@@ -23,7 +23,7 @@ symTableEntry SymbolTable::createSte(objectType oType, valueType vType, int leng
 bool SymbolTable::addToTable(string ident, symTableEntry Ste, string funcName) {
     //printf("add to %s table : %s\n", funcName == "" ? "global" : funcName.c_str(), ident.c_str());
     if (funcName == "") {
-        if(Ste.oType == VARIABLE || Ste.oType == CONSTANT){
+        if(Ste.oType == VARIABLE){
             Ste.offset = globalSymTableOffset;
             globalSymTableOffset += Ste.length == 0 ? 1 : Ste.length;
         } else
@@ -36,7 +36,7 @@ bool SymbolTable::addToTable(string ident, symTableEntry Ste, string funcName) {
         localSymTableOffsetIter = localSymTableOffsetList.find(funcName);
 
         if (localSymTableIter != localSymTableList.end()) {
-            if(Ste.oType == VARIABLE || Ste.oType == CONSTANT){
+            if(Ste.oType == VARIABLE){
                 Ste.offset = localSymTableOffsetIter->second;
                 localSymTableOffsetList[funcName] += Ste.length == 0 ? 1 : Ste.length;
             } else

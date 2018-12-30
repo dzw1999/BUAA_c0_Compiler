@@ -24,6 +24,7 @@ private:
 
     void globalRegisterOptimize();
     void blockPublicExpressionOptimize();
+    void splitIntoBasicBlock();
     Optimizer(Quadruple theQuadruple, Quadruple theOptimizedQuadruple);
 };
 
