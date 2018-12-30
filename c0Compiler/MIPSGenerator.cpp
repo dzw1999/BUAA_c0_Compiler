@@ -22,7 +22,7 @@ MIPSGenerator::getMIPSGenerator(SymbolTable &theSymbolTable, StackManager &theSt
 void MIPSGenerator::generateMIPS(Quadruple quadruple) {
 
     for (int i = 0; i < quadruple.length(); ++i) {
-        generateMIPSOfQuad(quadruple.quadrupleList[i]);
+        generateMIPSOfQuad(*quadruple.quadrupleList[i]);
     }
     fprintf(MIPSFile, ".data\n");
     for (int j = 0; j < MIPSDataLine; ++j) {

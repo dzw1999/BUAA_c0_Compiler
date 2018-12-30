@@ -12,27 +12,29 @@ Quadruple::Quadruple(FILE *quadrupleOut) {
 Quadruple::Quadruple(Quadruple &quadruple) {
     qout = quadruple.qout;
     for (int i = 0; i < quadruple.quadNum; i++) {
-        addQuadruple(quadruple.quadrupleList[i].op, quadruple.quadrupleList[i].dst, quadruple.quadrupleList[i].src1,
-                     quadruple.quadrupleList[i].src2, quadruple.quadrupleList[i].global);
+        addQuadruple(quadruple.quadrupleList[i]->op, quadruple.quadrupleList[i]->dst, quadruple.quadrupleList[i]->src1,
+                     quadruple.quadrupleList[i]->src2, quadruple.quadrupleList[i]->global);
     }
 }
 
 void Quadruple::addQuadruple(Operator op, string dst, string src1, string src2, bool global) {
+    delete quadrupleList[quadNum];
     //一个明显的内存泄漏,不过作业不要求复用性所以懒得改= =
+    //改完了，现在不漏了
     Quad *q = new Quad;
     q->op = op;
     q->src1 = src1;
     q->src2 = src2;
     q->dst = dst;
     q->global = global;
-    quadrupleList[quadNum++] = *q;
+    quadrupleList[quadNum++] = q;
 }
 
 //输出
 void Quadruple::output() {
     for (int i = 0; i < quadNum; ++i) {
         string outStr;
-        toString(quadrupleList[i], outStr);
+        toString(*quadrupleList[i], outStr);
         fprintf(qout, "%s", outStr.c_str());
     }
 }

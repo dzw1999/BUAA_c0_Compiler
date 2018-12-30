@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         fileName = argv[1];
     else
         printf("Please input a file path:\n");
-        cin >> fileName;
+    cin >> fileName;
     FILE *fin = fopen((fileName).c_str(), "r");
     if (fin == NULL) {
         printf("File does not exist.\n");
@@ -38,16 +38,15 @@ int main(int argc, char *argv[]) {
 
     SymbolTable symbolTable = SymbolTable::getSymbolTable();
 
-    Quadruple originQuadruple = Quadruple(originQuadrupleOut);
+    Quadruple originQuadruple(originQuadrupleOut);
 
-    Quadruple optimizedQuadruple = Quadruple(optimizedQuadrupleOut);
+    Quadruple optimizedQuadruple(optimizedQuadrupleOut);
 
     SemanticAnalyzer semanticAnalyzer = SemanticAnalyzer::getSemanticAnalyzer(originQuadruple);
 
     StackManager stackManager;
 
-    GrammarAnalyzer grammarAnalyzer = GrammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer,
-                                                      grammarOut);
+    GrammarAnalyzer grammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer, grammarOut);
 
     Optimizer optimizer = Optimizer::getOptimizer(originQuadruple, optimizedQuadruple);
 
@@ -77,7 +76,7 @@ int main(int argc, char *argv[]) {
     fclose(optimizedQuadrupleOut);
 
     //生成MIPS
-    if(optimizationOption)
+    if (optimizationOption)
         mipsGenerator.generateMIPS(optimizedQuadruple);
     else
         mipsGenerator.generateMIPS(originQuadruple);
