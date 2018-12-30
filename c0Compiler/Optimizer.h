@@ -14,13 +14,16 @@ public:
     bool blockPublicExpressionOption;
 
     void optimize();
-    void globalRegisterOptimize();
-    void blockPublicExpressionOptimize();
 
 private:
     Quadruple &originQuadruple;
     Quadruple &optimizedQuadruple;
+    int basicBlockEntry[MAX_QUAD];
+    int currentEntry;
+    int currentExit;
 
+    void globalRegisterOptimize();
+    void blockPublicExpressionOptimize();
     Optimizer(Quadruple theQuadruple, Quadruple theOptimizedQuadruple);
 };
 

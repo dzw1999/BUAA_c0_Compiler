@@ -9,7 +9,6 @@
 #include <queue>
 #include "Type.h"
 
-#define MAX_QUAD 2000
 using namespace std;
 
 class Quadruple{

@@ -18,6 +18,10 @@ void Optimizer::optimize() {
     }
 }
 
+void Optimizer::globalRegisterOptimize() {
+
+}
+
 Optimizer::Optimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple)
         : originQuadruple(theOriginQuadruple), optimizedQuadruple(theOptimizedQuadruple) {
 
