@@ -25,11 +25,11 @@ void MIPSGenerator::generateMIPS() {
     }
     fprintf(MIPSFile, ".data\n");
     for (int j = 0; j < MIPSDataLine; ++j) {
-        fprintf(MIPSFile, "%s", MIPSDataCode[j]);
+        fprintf(MIPSFile, "%s", MIPSDataCode[j].c_str());
     }
     fprintf(MIPSFile, "\n.text\n");
     for (int j = 0; j < MIPSTextLine; ++j) {
-        fprintf(MIPSFile, "%s", MIPSTextCode[j]);
+        fprintf(MIPSFile, "%s", MIPSTextCode[j].c_str());
     }
     fprintf(MIPSFile, "\nend:\n");
 }
@@ -165,159 +165,214 @@ void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
 
 
 void MIPSGenerator::ADDToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#add: %s = %s + %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#add: %s = %s + %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     //src2
     getSrcToMIPS(quad.src2, 2);
     //src1
     getSrcToMIPS(quad.src1, 1);
     //add
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s3, $s1, $s2\n");
+    sprintf(buffer, "add $s3, $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "add $s3, $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //write dst
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end add: %s = %s + %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#end add: %s = %s + %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::SUBToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#sub: %s = %s - %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#sub: %s = %s - %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     //src2
     getSrcToMIPS(quad.src2, 2);
     //src1
     getSrcToMIPS(quad.src1, 1);
     //sub
-    sprintf(MIPSTextCode[MIPSTextLine++], "sub $s3, $s1, $s2\n");
+    sprintf(buffer, "sub $s3, $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //write dst
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end sub: %s = %s - %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#end sub: %s = %s - %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::MULToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#mul: %s = %s * %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#mul: %s = %s * %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+
     //src2
     getSrcToMIPS(quad.src2, 2);
     //src1
     getSrcToMIPS(quad.src1, 1);
     //mult
-    sprintf(MIPSTextCode[MIPSTextLine++], "mult $s1, $s2\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "mflo $s3\n");
+    sprintf(buffer, "mult $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "mflo $s3\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //write dst
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end mul: %s = %s * %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#end mul: %s = %s * %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::DIVToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#div: %s = %s / %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#div: %s = %s / %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     //src2
     getSrcToMIPS(quad.src2, 2);
     //src1
     getSrcToMIPS(quad.src1, 1);
     //div
-    sprintf(MIPSTextCode[MIPSTextLine++], "div $s1, $s2\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "mflo $s3\n");
+    sprintf(buffer, "div $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "mflo $s3\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //write dst
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end div: %s = %s / %s\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#end div: %s = %s / %s\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::ASSToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#assign: %s = %s\n", quad.dst.c_str(), quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#assign: %s = %s\n", quad.dst.c_str(), quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     //src1
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s3, $0, $s1\n");
+    sprintf(buffer, "add $s3, $0, $s1\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end assign: %s = %s\n", quad.dst.c_str(), quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#end assign: %s = %s\n", quad.dst.c_str(), quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::ARASToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(),
-            quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(), quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     bool global = false;
     getAddrToMIPS(quad.dst, 2, global);
     //value
     getSrcToMIPS(quad.src1, 1);
     //存数组基地址
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t1, $s2, $0\n");
+    sprintf(buffer, "add $t1, $s2, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //index
     getSrcToMIPS(quad.src2, 2);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sll $s2, $s2, 2\n");
+    sprintf(buffer, "sll $s2, $s2, 2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     if (!global)
-        sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $t1, $s2\n");
+        sprintf(buffer, "sub $t0, $t1, $s2\n");
     else
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $t1, $s2\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s1, ($t0)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(),
-            quad.src1.c_str());
+        sprintf(buffer, "add $t0, $t1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sw $s1, ($t0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    if (debug) {
+        sprintf(buffer, "#end assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(), quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::GARToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#get: %s = %s[%s]\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#get: %s = %s[%s]\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     bool global = false;
     //arrname
     getAddrToMIPS(quad.src1, 1, global);
     //index
     getSrcToMIPS(quad.src2, 2);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sll $s2, $s2, 2\n");
+    sprintf(buffer, "sll $s2, $s2, 2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     if (!global)
-        sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $s1, $s2\n");
+        sprintf(buffer, "sub $t0, $s1, $s2\n");
     else
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $s1, $s2\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $s3, ($t0)\n");
+        sprintf(buffer, "add $t0, $s1, $s2\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "lw $s3, ($t0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end get: %s = %s[%s]\n", quad.dst.c_str(), quad.src1.c_str(),
-            quad.src2.c_str());
+    if (debug) {
+        sprintf(buffer, "#end get: %s = %s[%s]\n", quad.dst.c_str(), quad.src1.c_str(), quad.src2.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::LABToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "\n%s:\n", quad.src1.c_str());
+    sprintf(buffer, "\n%s:\n", quad.src1.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BGToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "bgt $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "bgt $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BGEToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "bge $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "bge $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BLToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "blt $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "blt $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BLEToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "ble $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "ble $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BEQToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "beq $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "beq $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::BNEToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "bne $s1, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "bne $s1, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::SWITCH_BNEToMIPS(Quad quad) {
     getSrcToMIPS(quad.src2, 2);
-    sprintf(MIPSTextCode[MIPSTextLine++], "bne $s4, $s2, %s\n", quad.dst.c_str());
+    sprintf(buffer, "bne $s4, $s2, %s\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::SWITCH_VARToMIPS(Quad quad) {
@@ -325,34 +380,55 @@ void MIPSGenerator::SWITCH_VARToMIPS(Quad quad) {
 }
 
 void MIPSGenerator::JToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "j %s\n", quad.src1.c_str());
+    sprintf(buffer, "j %s\n", quad.src1.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::CALLToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#call: %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#call: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     //存base
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s0, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+    sprintf(buffer, "sw $s0, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //存ra
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $ra, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+    sprintf(buffer, "sw $ra, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //改base
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $s0, $sp, 8\n");
+    sprintf(buffer, "addi $s0, $sp, 8\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     // 跳转
-    sprintf(MIPSTextCode[MIPSTextLine++], "jal %s\n", quad.src1.c_str());
+    sprintf(buffer, "jal %s\n", quad.src1.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //恢复ra
-    sprintf(MIPSTextCode[MIPSTextLine++], "subi $t0, $s0, 4\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $ra, ($t0)\n");
+    sprintf(buffer, "subi $t0, $s0, 4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "lw $ra, ($t0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //恢复base
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $s0, ($s0)\n");
+    sprintf(buffer, "lw $s0, ($s0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //返回值入栈
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $v0, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end call: %s\n", quad.src1.c_str());
+    sprintf(buffer, "sw $v0, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    if (debug) {
+        sprintf(buffer, "#end call: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::RETToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#return: %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#return: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     symTableEntry funSte = symbolTable.searchInGlobalTable(stackManager.functionStack.top());
     if (funSte.oType == FAULT) {
         ERROR(54);
@@ -361,81 +437,148 @@ void MIPSGenerator::RETToMIPS(Quad quad) {
     //无返回值
     if (quad.src1 == "") {
         //恢复sp
-        sprintf(MIPSTextCode[MIPSTextLine++], "addi $sp, $s0, %d\n", paraOffset);
-        sprintf(MIPSTextCode[MIPSTextLine++], "jr $ra\n");
+        sprintf(buffer, "addi $sp, $s0, %d\n", paraOffset);
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "jr $ra\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
     } else {
         //返回 v0
         getSrcToMIPS(quad.src1, 1);
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $s1\n");
+        sprintf(buffer, "add $v0, $0, $s1\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
         //恢复sp
-        sprintf(MIPSTextCode[MIPSTextLine++], "addi $sp, $s0, %d\n", paraOffset);
-        sprintf(MIPSTextCode[MIPSTextLine++], "jr $ra\n");
+        sprintf(buffer, "addi $sp, $s0, %d\n", paraOffset);
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "jr $ra\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end return: %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#end return: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::PUSHToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#push: %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#push: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s1, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end push: %s\n", quad.src1.c_str());
+    sprintf(buffer, "sw $s1, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    if (debug) {
+        sprintf(buffer, "#end push: %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::RIToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#read int:  %s\n", quad.dst.c_str());
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $v0, $v0, 5\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "syscall\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s3, $0, $v0\n");
+    if (debug) {
+        sprintf(buffer, "#read int:  %s\n", quad.dst.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+    sprintf(buffer, "add $v0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $v0, $v0, 5\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "syscall\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "add $s3, $0, $v0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end read int:  %s\n", quad.dst.c_str());
+    if (debug) {
+        sprintf(buffer, "#end read int:  %s\n", quad.dst.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::RCToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#read char:  %s\n", quad.dst.c_str());
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $v0, $v0, 12\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "syscall\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s3, $0, $v0\n");
+    if (debug) {
+        sprintf(buffer, "#read char:  %s\n", quad.dst.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+    sprintf(buffer, "add $v0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $v0, $v0, 12\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "syscall\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "add $s3, $0, $v0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     writeDst(quad.dst);
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end read char:  %s\n", quad.dst.c_str());
+    if (debug) {
+        sprintf(buffer, "#end read char:  %s\n", quad.dst.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::WSToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#write string:  %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#write string:  %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     static string str = "str";
     static int a = 0;
     string strLabel = str;
     strLabel.append(to_string(a));
     string outStr = quad.src1;
-    sprintf(MIPSDataCode[MIPSDataLine++], "%s: .asciiz %s\n", strLabel.c_str(), outStr.c_str());
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $v0, $v0, 4\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "la $a0, %s\n", strLabel.c_str());
-    sprintf(MIPSTextCode[MIPSTextLine++], "syscall\n");
+    sprintf(buffer, "%s: .asciiz %s\n", strLabel.c_str(), outStr.c_str());
+    MIPSDataCode[MIPSDataLine++] = buffer;
+    sprintf(buffer, "add $v0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $v0, $v0, 4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "la $a0, %s\n", strLabel.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "syscall\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     a++;
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end write string:  %s\n", quad.src1.c_str());
+    if (debug) {
+        sprintf(buffer, "#end write string:  %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::WIToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#write int:  %s\n", quad.src1.c_str());
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $v0, $v0, 1\n");
+    if (debug) {
+        sprintf(buffer, "#write int:  %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+    sprintf(buffer, "add $v0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $v0, $v0, 1\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $a0, $0, $s1\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "syscall\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end write int:  %s\n", quad.src1.c_str());
+    sprintf(buffer, "add $a0, $0, $s1\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "syscall\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    if (debug) {
+        sprintf(buffer, "#end write int:  %s\n", quad.src1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::WCToMIPS(Quad quad) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#write char\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $v0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $v0, $v0, 11\n");
+    if (debug) {
+        sprintf(buffer, "#write char\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+    sprintf(buffer, "add $v0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $v0, $v0, 11\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     getSrcToMIPS(quad.src1, 1);
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $a0, $0, $s1\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "syscall\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end write char\n");
+    sprintf(buffer, "add $a0, $0, $s1\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "syscall\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    if (debug) {
+        sprintf(buffer, "#end write char\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::VAR_DECLAREToMIPS(Quad quad) {
@@ -444,15 +587,18 @@ void MIPSGenerator::VAR_DECLAREToMIPS(Quad quad) {
         if (ste.oType == FAULT) {
             ERROR(54);
         }
-        sprintf(MIPSDataCode[MIPSDataLine++], "%s: .space %d\n", quad.dst.c_str(), atoi(quad.src2.c_str()) * 4);
+        sprintf(buffer, "%s: .space %d\n", quad.dst.c_str(), atoi(quad.src2.c_str()) * 4);
+        MIPSDataCode[MIPSDataLine++] = buffer;
     } else {
         symTableEntry ste = symbolTable.searchInLocalTable(quad.dst, stackManager.functionStack.top());
         if (ste.oType == FAULT) {
             ERROR(54);
         }
         for (int i = 0; i < atoi(quad.src2.c_str()); ++i) {
-            sprintf(MIPSTextCode[MIPSTextLine++], "sw $0, ($sp)\n");
-            sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+            sprintf(buffer, "sw $0, ($sp)\n");
+            MIPSTextCode[MIPSTextLine++] = buffer;
+            sprintf(buffer, "addiu $sp, $sp, -4\n");
+            MIPSTextCode[MIPSTextLine++] = buffer;
         }
 
     }
@@ -460,24 +606,33 @@ void MIPSGenerator::VAR_DECLAREToMIPS(Quad quad) {
 
 void MIPSGenerator::MAIN_FUNCTION_DEFINEToMIPS(Quad quad) {
     //贴标签
-    sprintf(MIPSTextCode[MIPSTextLine++], "\n%s:\n", quad.dst.c_str());
+    sprintf(buffer, "\n%s:\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //初始化
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s0, $0, $sp\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "la $ra, end\n");
+    sprintf(buffer, "add $s0, $0, $sp\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "la $ra, end\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //存base
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s0, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+    sprintf(buffer, "sw $s0, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //存ra
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $ra, ($sp)\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+    sprintf(buffer, "sw $ra, ($sp)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addiu $sp, $sp, -4\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     stackManager.functionStack.push(quad.dst);
 }
 
 void MIPSGenerator::FUNCTION_DEFINEToMIPS(Quad quad) {
     stackManager.functionStack.pop();
-    sprintf(MIPSTextCode[MIPSTextLine++], "\nj main\n");
+    sprintf(buffer, "\nj main\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
     //贴标签
-    sprintf(MIPSTextCode[MIPSTextLine++], "\n%s:\n", quad.dst.c_str());
+    sprintf(buffer, "\n%s:\n", quad.dst.c_str());
+    MIPSTextCode[MIPSTextLine++] = buffer;
     stackManager.functionStack.push(quad.dst);
 }
 
@@ -497,21 +652,27 @@ void MIPSGenerator::getAddrToMIPS(string src, int getSrc, bool &global) {
     symTableEntry gloSte = symbolTable.searchInGlobalTable(src);
     if (ste.oType != FAULT) {
         int MIPSOffset = (ste.offset + 2) * 4;
-        sprintf(MIPSTextCode[MIPSTextLine++], "subi $s%d, $s0, %d\n", getSrc, MIPSOffset);
+        sprintf(buffer, "subi $s%d, $s0, %d\n", getSrc, MIPSOffset);
+        MIPSTextCode[MIPSTextLine++] = buffer;
     } else if (gloSte.oType != FAULT) {
         global = true;
-        sprintf(MIPSTextCode[MIPSTextLine++], "addi $t0, $0, 0x10010000\n");
-        sprintf(MIPSTextCode[MIPSTextLine++], "addi $s%d, $t0, %d\n", getSrc, gloSte.offset * 4);
+        sprintf(buffer, "addi $t0, $0, 0x10010000\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "addi $s%d, $t0, %d\n", getSrc, gloSte.offset * 4);
+        MIPSTextCode[MIPSTextLine++] = buffer;
     } else {
         ERROR(54);
     }
 }
 
 void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
-    if (src != "'\n'") {
-        sprintf(MIPSTextCode[MIPSTextLine++], "#load %s to s%d\n", src.c_str(), quadSrc);
-    } else {
-        sprintf(MIPSTextCode[MIPSTextLine++], "#enter\n");
+    if (debug) {
+        if (src != "'\n'") {
+            sprintf(buffer, "#load %s to s%d\n", src.c_str(), quadSrc);
+        } else {
+            sprintf(buffer, "#enter\n");
+        }
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
 
     if (src[0] == '\'' || isdigit(src[0]) || src[0] == '-' || src[0] == '+') {
@@ -543,20 +704,27 @@ void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
         }
     } else {
         //取栈顶
-        sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, 4\n");
-        sprintf(MIPSTextCode[MIPSTextLine++], "lw $s%d, ($sp)\n", quadSrc);
+        sprintf(buffer, "addiu $sp, $sp, 4\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "lw $s%d, ($sp)\n", quadSrc);
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
-
-    if (src != "'\n'") {
-        sprintf(MIPSTextCode[MIPSTextLine++], "#load %s to s%d\n", src.c_str(), quadSrc);
-    } else {
-        sprintf(MIPSTextCode[MIPSTextLine++], "#end enter\n");
+    if (debug) {
+        if (src != "'\n'") {
+            sprintf(buffer, "#load %s to s%d\n", src.c_str(), quadSrc);
+        } else {
+            sprintf(buffer, "#end enter\n");
+        }
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
 }
 
 
 void MIPSGenerator::writeDst(string dst) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "#write s3 to %s\n", dst.c_str());
+    if (debug) {
+        sprintf(buffer, "#write s3 to %s\n", dst.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
     symTableEntry ste = symbolTable.searchInLocalTable(dst, stackManager.functionStack.top());
     symTableEntry gloSte = symbolTable.searchInGlobalTable(dst);
     int MIPSOffset = (ste.offset + 2) * 4;
@@ -574,67 +742,100 @@ void MIPSGenerator::writeDst(string dst) {
         writeGlobal(gloSte.offset * 4);
 
     } else {
-        sprintf(MIPSTextCode[MIPSTextLine++], "sw $s3, ($sp)\n");
-        sprintf(MIPSTextCode[MIPSTextLine++], "addiu $sp, $sp, -4\n");
+        sprintf(buffer, "sw $s3, ($sp)\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "addiu $sp, $sp, -4\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    sprintf(MIPSTextCode[MIPSTextLine++], "#end write s3\n");
+    if(debug) {
+        sprintf(buffer, "#end write s3\n");
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
 }
 
 void MIPSGenerator::getLocal(int offset, int quadSrc) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $t0, $t0, %d\n", offset);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $s0, $t0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $s%d, ($t0)\n", quadSrc);
+    sprintf(buffer, "add $t0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $t0, $t0, %d\n", offset);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sub $t0, $s0, $t0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "lw $s%d, ($t0)\n", quadSrc);
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::getParameter(int paraNum, int paraOrder, int quadSrc) {
     int addr = (paraNum + 1 - paraOrder) * 4;
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $t0, $t0, %d\n", addr);
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t2, $s0, $t0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $s%d, ($t2)\n", quadSrc);
+    sprintf(buffer, "add $t0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $t0, $t0, %d\n", addr);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "add $t2, $s0, $t0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "lw $s%d, ($t2)\n", quadSrc);
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::getGlobal(int offset, int quadSrc) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $t0, $0, 0x10010000\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $t0, $t0, %d\n", offset);
-    sprintf(MIPSTextCode[MIPSTextLine++], "lw $s%d, ($t0)\n", quadSrc);
+    sprintf(buffer, "addi $t0, $0, 0x10010000\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addi $t0, $t0, %d\n", offset);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "lw $s%d, ($t0)\n", quadSrc);
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::getConst(string src, int quadSrc) {
     if (src[0] == '\'') {
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
-        sprintf(MIPSTextCode[MIPSTextLine++], "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, (int) src[1]);
+        sprintf(buffer, "add $s%d, $0, $0\n", quadSrc);
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, (int) src[1]);
+        MIPSTextCode[MIPSTextLine++] = buffer;
     } else if (src[0] == '+' || src[0] == '-' || isdigit(src[0])) {
-        sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
-        sprintf(MIPSTextCode[MIPSTextLine++], "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, atoi(src.c_str()));
+        sprintf(buffer, "add $s%d, $0, $0\n", quadSrc);
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        sprintf(buffer, "ori $s%d, $s%d, %d\n", quadSrc, quadSrc, atoi(src.c_str()));
+        MIPSTextCode[MIPSTextLine++] = buffer;
     }
 }
 
 void MIPSGenerator::getConst(symTableEntry ste, int quadSrc) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $s%d, $0, $0\n", quadSrc);
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $s%d, $s%d, %d\n", quadSrc, quadSrc, ste.constValue);
+    sprintf(buffer, "add $s%d, $0, $0\n", quadSrc);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addi $s%d, $s%d, %d\n", quadSrc, quadSrc, ste.constValue);
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::writeLocal(int offset) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $t0, $t0, %d\n", offset);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sub $t0, $s0, $t0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s3, ($t0)\n");
+    sprintf(buffer, "add $t0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $t0, $t0, %d\n", offset);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sub $t0, $s0, $t0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sw $s3, ($t0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::writeParameter(int paraNum, int paraOrder) {
     int addr = (paraNum + 1 - paraOrder) * 4;
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t0, $0, $0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "ori $t0, $t0, %d\n", addr);
-    sprintf(MIPSTextCode[MIPSTextLine++], "add $t2, $s0, $t0\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s3, ($t2)\n");
+    sprintf(buffer, "add $t0, $0, $0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "ori $t0, $t0, %d\n", addr);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "add $t2, $s0, $t0\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sw $s3, ($t2)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 void MIPSGenerator::writeGlobal(int offset) {
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $t0, $0, 0x10010000\n");
-    sprintf(MIPSTextCode[MIPSTextLine++], "addi $t0, $t0, %d\n", offset);
-    sprintf(MIPSTextCode[MIPSTextLine++], "sw $s3, ($t0)\n");
+    sprintf(buffer, "addi $t0, $0, 0x10010000\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "addi $t0, $t0, %d\n", offset);
+    MIPSTextCode[MIPSTextLine++] = buffer;
+    sprintf(buffer, "sw $s3, ($t0)\n");
+    MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
 MIPSGenerator::MIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager,
@@ -646,5 +847,6 @@ MIPSGenerator::MIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTabl
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;
     MIPSTextLine = 0;
+    debug = false;
 }
 

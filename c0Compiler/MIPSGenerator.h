@@ -10,9 +10,9 @@
 #include "StackManager.h"
 #include "ExceptionHandler.h"
 
-#define MAX_MIPS_LENGTH 6000
-#define MAX_MIPS_DATA_CODE 600
-#define MAX_MIPS_CODE_LENGTH 200
+#define MAX_MIPS_TEXT_LENGTH 6000
+#define MAX_MIPS_DATA_LENGTH 600
+#define MAX_MIPS_CODE_LENGTH 1000
 
 class MIPSGenerator {
 public:
@@ -25,8 +25,10 @@ private:
     StackManager stackManager;
     ExceptionHandler exceptionHandler;
     FILE *MIPSFile;
-    char MIPSTextCode[MAX_MIPS_LENGTH][MAX_MIPS_CODE_LENGTH], MIPSDataCode[MAX_MIPS_DATA_CODE][MAX_MIPS_CODE_LENGTH];
+    string MIPSTextCode[MAX_MIPS_TEXT_LENGTH], MIPSDataCode[MAX_MIPS_DATA_LENGTH];
     int MIPSTextLine, MIPSDataLine;
+    bool debug;
+    char buffer[MAX_MIPS_CODE_LENGTH];
 
     void generateMIPSOfQuad(Quad quad);
 
