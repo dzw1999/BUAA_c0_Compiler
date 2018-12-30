@@ -14,6 +14,7 @@
 
 int main(int argc, char *argv[]) {
     string fileName;
+    bool optimizationOption = false;
     if (argc > 1)
         fileName = argv[1];
     else
@@ -76,7 +77,10 @@ int main(int argc, char *argv[]) {
     fclose(optimizedQuadrupleOut);
 
     //生成MIPS
-    mipsGenerator.generateMIPS(originQuadruple);
+    if(optimizationOption)
+        mipsGenerator.generateMIPS(optimizedQuadruple);
+    else
+        mipsGenerator.generateMIPS(originQuadruple);
     fclose(MIPSOut);
 
     fclose(fin);
