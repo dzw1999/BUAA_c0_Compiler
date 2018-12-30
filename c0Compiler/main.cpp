@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
     fclose(originQuadrupleOut);
 
     //优化
-    optimizer.optimize();
+    //optimizer.optimize();
     printf("Optimization succeeded.\n");
 
     //输出优化后四元式

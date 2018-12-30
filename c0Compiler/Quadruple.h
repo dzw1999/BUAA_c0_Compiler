@@ -6,7 +6,7 @@
 #define C0COMPILER_QUADRUPLE_H
 
 #include <string>
-#include <queue>
+#include <vector>
 #include "Type.h"
 
 using namespace std;
@@ -15,7 +15,7 @@ class Quadruple{
 public:
     Quadruple(FILE *quadrupleOut);
     Quadruple(Quadruple &quadruple);
-    Quad *quadrupleList[MAX_QUAD];
+    vector<Quad *> quadrupleList;
     void addQuadruple(Operator op, string dst, string src1, string src2, bool global = false);
     void output();
     string newTemp();
@@ -23,7 +23,6 @@ public:
     void toString(Quad q, string &res);
 
 private:
-    int quadNum;
     FILE *qout;
 };
 

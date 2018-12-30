@@ -6,6 +6,7 @@
 #define C0COMPILER_OPTIMIZER_H
 
 #include "Quadruple.h"
+#include <vector>
 
 class Optimizer {
 public:
@@ -19,7 +20,8 @@ public:
 private:
     Quadruple &originQuadruple;
     Quadruple &optimizedQuadruple;
-    int basicBlockEntry[MAX_QUAD];
+    vector<int> functionEntry;
+    vector<int> basicBlockEntry;
     int currentEntry;
     int currentExit;
 
@@ -27,6 +29,7 @@ private:
     void blockPublicExpressionOptimize();
     void constantCombinationOptimize();
 
+    void splitIntoFunction();
     void splitIntoBasicBlock();
     Optimizer(Quadruple theQuadruple, Quadruple theOptimizedQuadruple);
 };
