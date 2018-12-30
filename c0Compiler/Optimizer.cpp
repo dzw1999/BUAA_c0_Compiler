@@ -9,6 +9,15 @@ Optimizer &Optimizer::getOptimizer(Quadruple theOriginQuadruple, Quadruple theOp
     return instance;
 }
 
+void Optimizer::optimize() {
+    if(globalRegisterOption){
+        //globalRegisterOptimize();
+    }
+    if(blockPublicExpressionOption){
+        //blockPublicExpressionOptimize();
+    }
+}
+
 Optimizer::Optimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple)
         : originQuadruple(theOriginQuadruple), optimizedQuadruple(theOptimizedQuadruple) {
 

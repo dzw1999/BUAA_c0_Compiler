@@ -9,6 +9,10 @@
 #define MAX_SYMBOL_NUM 10000        // 最大symbol数
 #define MAX_SYMBOL_LENGTH 1000      // 最大symbol长度
 
+#define MAX_MIPS_TEXT_LENGTH 6000
+#define MAX_MIPS_DATA_LENGTH 600
+#define MAX_MIPS_CODE_LENGTH 1000
+
 using namespace std;
 
 //符号表

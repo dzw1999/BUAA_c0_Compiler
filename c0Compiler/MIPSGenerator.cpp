@@ -12,14 +12,15 @@
     throw x
 
 MIPSGenerator &
-MIPSGenerator::getMIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager,
+MIPSGenerator::getMIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
                                 ExceptionHandler &theExceptionHandler,
                                 FILE *theMIPSFile) {
-    static MIPSGenerator instance(theQuadruple, theSymbolTable, theStackManager, theExceptionHandler, theMIPSFile);
+    static MIPSGenerator instance(theSymbolTable, theStackManager, theExceptionHandler, theMIPSFile);
     return instance;
 }
 
-void MIPSGenerator::generateMIPS() {
+void MIPSGenerator::generateMIPS(Quadruple quadruple) {
+
     for (int i = 0; i < quadruple.length(); ++i) {
         generateMIPSOfQuad(quadruple.quadrupleList[i]);
     }
@@ -747,7 +748,7 @@ void MIPSGenerator::writeDst(string dst) {
         sprintf(buffer, "addiu $sp, $sp, -4\n");
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    if(debug) {
+    if (debug) {
         sprintf(buffer, "#end write s3\n");
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
@@ -838,11 +839,10 @@ void MIPSGenerator::writeGlobal(int offset) {
     MIPSTextCode[MIPSTextLine++] = buffer;
 }
 
-MIPSGenerator::MIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager,
+MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
                              ExceptionHandler &theExceptionHandler,
                              FILE *theMIPSFile)
-        : quadruple(theQuadruple),
-          symbolTable(theSymbolTable),
+        : symbolTable(theSymbolTable),
           stackManager(theStackManager),
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;

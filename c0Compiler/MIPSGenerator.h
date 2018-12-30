@@ -9,18 +9,14 @@
 #include "SymbolTable.h"
 #include "StackManager.h"
 #include "ExceptionHandler.h"
-
-#define MAX_MIPS_TEXT_LENGTH 6000
-#define MAX_MIPS_DATA_LENGTH 600
-#define MAX_MIPS_CODE_LENGTH 1000
+#include "Type.h"
 
 class MIPSGenerator {
 public:
-    static MIPSGenerator &getMIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager, ExceptionHandler &theExceptionHandler, FILE *theMIPSFile);
+    static MIPSGenerator &getMIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager, ExceptionHandler &theExceptionHandler, FILE *theMIPSFile);
 
-    void generateMIPS();
+    void generateMIPS(Quadruple quadruple);
 private:
-    Quadruple &quadruple;
     SymbolTable &symbolTable;
     StackManager &stackManager;
     ExceptionHandler &exceptionHandler;
@@ -75,7 +71,7 @@ private:
     void writeGlobal(int offset);
     void writeParameter(int paraNum,int paraOrder);
 
-    MIPSGenerator(Quadruple &theQuadruple, SymbolTable &theSymbolTable, StackManager &theStackManager, ExceptionHandler &theExceptionHandler, FILE *theMIPSFile);
+    MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager, ExceptionHandler &theExceptionHandler, FILE *theMIPSFile);
 };
 
 

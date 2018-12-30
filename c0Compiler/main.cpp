@@ -50,27 +50,35 @@ int main(int argc, char *argv[]) {
 
     Optimizer optimizer = Optimizer::getOptimizer(originQuadruple, optimizedQuadruple);
 
-    MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(originQuadruple, symbolTable, stackManager,
-                                                                  exceptionHandler, MIPSOut);
+    MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(symbolTable, stackManager, exceptionHandler, MIPSOut);
 
     // 词法分析
     lexicalAnalyzer.lexicalAnalyze();
+    printf("Lexical analysis succeeded.\n");
 
     // 语法分析(语义分析伴随语法分析)
     if (grammarAnalyzer.grammarAnalyze() == 1)
         printf("Exception occurred in grammar analysis.\n");
     else
-        printf("Grammar analysis Succeeded.\n");
+        printf("Grammar and semantic analysis succeeded.\n");
     fclose(grammarOut);
 
-    //输出四元式
-    quadruple.output();
-    fclose(quadrupleOut);
+    //输出原始四元式
+    originQuadruple.output();
+    fclose(originQuadrupleOut);
+
+    //优化
+    optimizer.optimize();
+    printf("Optimization succeeded.\n");
+
+    //输出优化后四元式
+    optimizedQuadruple.output();
+    fclose(optimizedQuadrupleOut);
 
     //生成MIPS
-    mipsGenerator.generateMIPS();
+    mipsGenerator.generateMIPS(originQuadruple);
     fclose(MIPSOut);
-    fclose(fin);
 
+    fclose(fin);
     return 0;
 }
