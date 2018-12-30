@@ -10,9 +10,9 @@
 class Optimizer {
 public:
     static Optimizer &getOptimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple);  // 单例设计模式
+    bool constantCombinationOption;
     bool globalRegisterOption;
     bool blockPublicExpressionOption;
-    bool
 
     void optimize();
 
@@ -25,6 +25,8 @@ private:
 
     void globalRegisterOptimize();
     void blockPublicExpressionOptimize();
+    void constantCombinationOptimize();
+
     void splitIntoBasicBlock();
     Optimizer(Quadruple theQuadruple, Quadruple theOptimizedQuadruple);
 };

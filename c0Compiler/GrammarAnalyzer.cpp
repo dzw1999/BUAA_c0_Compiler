@@ -622,6 +622,7 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
             printmsg("line %d, This is a factor.\n", SYM_LINE);
             variable = false;
         } else {    //标识符
+            rtn_factor = ident;
             // 类型检验
             if (ste.oType == FUNCTION) {
                 ERROR(45);
@@ -631,8 +632,8 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
             }
             if(ste.oType == CONSTANT){
                 staticValue = ste.constValue;
+                rtn_factor = to_string(ste.constValue);
             }
-            rtn_factor = ident;
             type = ste.vType;
             variable = ste.oType == VARIABLE;
             printmsg("line %d, This is a factor.\n", SYM_LINE);

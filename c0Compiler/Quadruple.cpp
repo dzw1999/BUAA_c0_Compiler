@@ -9,6 +9,14 @@ Quadruple::Quadruple(FILE *quadrupleOut) {
     qout = quadrupleOut;
 }
 
+Quadruple::Quadruple(Quadruple &quadruple) {
+    qout = quadruple.qout;
+    for (int i = 0; i < quadruple.quadNum; i++) {
+        addQuadruple(quadruple.quadrupleList[i].op, quadruple.quadrupleList[i].dst, quadruple.quadrupleList[i].src1,
+                     quadruple.quadrupleList[i].src2, quadruple.quadrupleList[i].global);
+    }
+}
+
 void Quadruple::addQuadruple(Operator op, string dst, string src1, string src2, bool global) {
     //一个明显的内存泄漏,不过作业不要求复用性所以懒得改= =
     Quad *q = new Quad;
