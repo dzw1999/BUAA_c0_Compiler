@@ -14,7 +14,7 @@ using namespace std;
 
 class Quadruple{
 public:
-    static Quadruple &getQuadruple(FILE *quadrupleOut);
+    Quadruple(FILE *quadrupleOut);
     Quad quadrupleList[MAX_QUAD];
     void addQuadruple(Operator op, string dst, string src1, string src2, bool global = false);
     void output();
@@ -25,7 +25,6 @@ public:
 private:
     int quadNum;
     FILE *qout;
-    Quadruple(FILE *quadrupleOut);
 };
 
 

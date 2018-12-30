@@ -20,10 +20,10 @@ public:
 
     void generateMIPS();
 private:
-    Quadruple quadruple;
-    SymbolTable symbolTable;
-    StackManager stackManager;
-    ExceptionHandler exceptionHandler;
+    Quadruple &quadruple;
+    SymbolTable &symbolTable;
+    StackManager &stackManager;
+    ExceptionHandler &exceptionHandler;
     FILE *MIPSFile;
     string MIPSTextCode[MAX_MIPS_TEXT_LENGTH], MIPSDataCode[MAX_MIPS_DATA_LENGTH];
     int MIPSTextLine, MIPSDataLine;

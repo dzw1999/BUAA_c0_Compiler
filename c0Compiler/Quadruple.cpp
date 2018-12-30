@@ -4,9 +4,9 @@
 
 #include "Quadruple.h"
 
-Quadruple& Quadruple::getQuadruple(FILE *quadrupleOut) {
-    static Quadruple instance(quadrupleOut);
-    return instance;
+Quadruple::Quadruple(FILE *quadrupleOut) {
+    quadNum = 0;
+    qout = quadrupleOut;
 }
 
 void Quadruple::addQuadruple(Operator op, string dst, string src1, string src2, bool global) {
@@ -78,9 +78,4 @@ void Quadruple::toString(Quad q, string &res) {
     sprintf(rtn, "%s: %s, %s, %s\n", OperatorStr[q.op].c_str(), q.dst.c_str(), q.src1.c_str(), q.src2.c_str());
     res = rtn;
     return;
-}
-
-Quadruple::Quadruple(FILE *quadrupleOut) {
-    quadNum = 0;
-    qout = quadrupleOut;
 }

@@ -5,9 +5,23 @@
 #ifndef C0COMPILER_OPTIMIZER_H
 #define C0COMPILER_OPTIMIZER_H
 
+#include "Quadruple.h"
 
 class Optimizer {
+public:
+    static Optimizer &getOptimizer(Quadruple theOriginQuadruple, Quadruple theOptimizedQuadruple);  // 单例设计模式
+    bool globalRegisterOption;
+    bool blockPublicExpressionOption;
 
+    void optimize();
+    void globalRegisterOptimize();
+    void blockPublicExpressionOptimize();
+
+private:
+    Quadruple &originQuadruple;
+    Quadruple &optimizedQuadruple;
+
+    Optimizer(Quadruple theQuadruple, Quadruple theOptimizedQuadruple);
 };
 
 
