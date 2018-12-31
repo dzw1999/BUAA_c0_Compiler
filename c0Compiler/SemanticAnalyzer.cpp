@@ -22,6 +22,7 @@ const string SemanticAnalyzer::newLabel(const string &label) {
     static string newLab;
     newLab.clear();
     newLab.append("_label_");
+    newLab.append(label);
     newLab.append(to_string(labelCnt++));
     return newLab;
 }

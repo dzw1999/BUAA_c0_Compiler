@@ -32,6 +32,7 @@ private:
     int MIPSTextLine, MIPSDataLine;
     bool debug;
     char buffer[MAX_MIPS_CODE_LENGTH];
+    bool isNum(string a);
 
     void generateMIPSOfQuad(Quad quad);
 
@@ -97,9 +98,9 @@ private:
 
     void getAddrToMIPS(string src, int getSrc, bool &global);
 
-    void getSrcToMIPS(string src, int quadSrc);
+    string getSrcToMIPS(string src, int quadSrc, bool intoReg = false);
 
-    void writeDst(string dst);
+    void writeDst(string dst, string reg = "$s1");
 
     void getLocal(int offset, int quadSrc);
 
@@ -111,11 +112,11 @@ private:
 
     void getConst(symTableEntry ste, int quadSrc);
 
-    void writeLocal(int offset);
+    void writeLocal(int offset, string reg = "$s1");
 
-    void writeGlobal(int offset);
+    void writeGlobal(int offset, string reg = "$s1");
 
-    void writeParameter(int paraNum, int paraOrder);
+    void writeParameter(int paraNum, int paraOrder, string reg = "$s1");
 
     MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
                   GlobalRegisterAllocation &theGlobalRegisterAllocation, ExceptionHandler &theExceptionHandler,

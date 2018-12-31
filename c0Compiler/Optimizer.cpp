@@ -4,13 +4,6 @@
 
 #include "Optimizer.h"
 
-bool isNum(string a){
-    if(isdigit(a[0]) || a[0] == '+' || a[0] == '-'){
-        return true;
-    }
-    return false;
-}
-
 Optimizer &Optimizer::getOptimizer(Quadruple &theOriginQuadruple) {
     static Optimizer instance(theOriginQuadruple);
     return instance;
@@ -35,11 +28,21 @@ void Optimizer::constantCombinationOptimize() {
              originQuadruple.quadrupleList[i]->op == SUB ||
              originQuadruple.quadrupleList[i]->op == MUL ||
              originQuadruple.quadrupleList[i]->op == DIV) &&
-            isNum(originQuadruple.quadrupleList[i]->src1) &&
-            isNum(originQuadruple.quadrupleList[i]->src2)) {
+            isConst(originQuadruple.quadrupleList[i]->src1) &&
+            isConst(originQuadruple.quadrupleList[i]->src2)) {
             string replace = originQuadruple.quadrupleList[i]->dst;
-            int num1 = atoi(originQuadruple.quadrupleList[i]->src1.c_str());
-            int num2 = atoi(originQuadruple.quadrupleList[i]->src2.c_str());
+            int num1;
+            int num2;
+            if(originQuadruple.quadrupleList[i]->src1[0] == '\''){
+                num1 = (int)originQuadruple.quadrupleList[i]->src1[1];
+            } else{
+                num1 = atoi(originQuadruple.quadrupleList[i]->src1.c_str());
+            }
+            if(originQuadruple.quadrupleList[i]->src2[0] == '\''){
+                num2 = (int)originQuadruple.quadrupleList[i]->src2[1];
+            } else{
+                num2 = atoi(originQuadruple.quadrupleList[i]->src2.c_str());
+            }
             int resConst = originQuadruple.quadrupleList[i]->op == ADD ? num1 + num2 :
                            originQuadruple.quadrupleList[i]->op == SUB ? num1 - num2 :
                            originQuadruple.quadrupleList[i]->op == MUL ? num1 * num2 :
@@ -89,6 +92,13 @@ void Optimizer::splitIntoBasicBlock() {
 //            originQuadruple.quadrupleList[i]->op == RET ||
 //            originQuadruple.quadrupleList[i]->op == ||)
 //    }
+}
+
+bool Optimizer::isConst(string a) {
+    if (isdigit(a[0]) || a[0] == '+' || a[0] == '-' || a[0] == '\'') {
+        return true;
+    }
+    return false;
 }
 
 Optimizer::Optimizer(Quadruple &theOriginQuadruple)

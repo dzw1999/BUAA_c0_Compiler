@@ -30,6 +30,7 @@ private:
 
     void splitIntoFunction();
     void splitIntoBasicBlock();
+    bool isConst(string a);
     Optimizer(Quadruple &theQuadruple);
 };
 

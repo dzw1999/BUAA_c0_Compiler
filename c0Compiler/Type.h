@@ -139,4 +139,5 @@ enum symbolType {
 
     VOID                // void 关键字
 };
+
 #endif //C0COMPILER_TYPE_H

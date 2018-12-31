@@ -5,5 +5,5 @@
 #include "StackManager.h"
 
 StackManager::StackManager() {
-    functionStack.push("");
+    functionStack.push_back("");
 }

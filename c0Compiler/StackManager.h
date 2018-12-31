@@ -6,13 +6,13 @@
 #define C0COMPILER_STACKMANAGER_H
 
 #include <string>
-#include <stack>
+#include <vector>
 
 using namespace std;
 
 class StackManager {
 public:
-    stack<string> functionStack;
+    vector<string> functionStack;
     StackManager();
 };
 

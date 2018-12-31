@@ -13,6 +13,7 @@ void GlobalRegisterAllocation::allocate() {
     map<string, int> counter;
     string curFunction = "";
     allocationTable allocationTable1;
+    int loop= 0;
     for (int i = 0; i < quadruple.quadrupleList.size(); ++i) {
         if (quadruple.quadrupleList[i]->op == FUNCTION_DEFINE || quadruple.quadrupleList[i]->op == MAIN_FUNCTION_DEFINE) {
             pool.clear();
@@ -22,12 +23,23 @@ void GlobalRegisterAllocation::allocate() {
             counter.clear();
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == VAR_DECLARE && quadruple.quadrupleList[i]->src2 == "1"){
-            counter[quadruple.quadrupleList[i]->dst] = 0;
+        if(quadruple.quadrupleList[i]->op == VAR_DECLARE){
+            if(quadruple.quadrupleList[i]->src2 == "1")
+                counter[quadruple.quadrupleList[i]->dst] = 0;
             continue;
         }
         if(quadruple.quadrupleList[i]->op == PARAMETER_DECLARE){
             continue;
+        }
+        if(quadruple.quadrupleList[i]->op == LAB){
+            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+                loop ++;
+            }
+        }
+        if(quadruple.quadrupleList[i]->op == J){
+            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+                loop --;
+            }
         }
         if(quadruple.quadrupleList[i]->op == FUNCTION_END) {
             int maxRefer;
@@ -51,15 +63,15 @@ void GlobalRegisterAllocation::allocate() {
         map<string, int>::iterator counterIter;
         counterIter = counter.find(quadruple.quadrupleList[i]->dst);
         if (counterIter != counter.end()) {
-            counter[counterIter->first] += 1;
+            counter[counterIter->first] += 1 + 5 * loop;
         }
         counterIter = counter.find(quadruple.quadrupleList[i]->src1);
         if (counterIter != counter.end()) {
-            counter[counterIter->first] += 1;
+            counter[counterIter->first] += 1 + 5 * loop;
         }
         counterIter = counter.find(quadruple.quadrupleList[i]->src2);
         if (counterIter != counter.end()) {
-            counter[counterIter->first] += 1;
+            counter[counterIter->first] += 1 + 5 * loop;
         }
 
     }
