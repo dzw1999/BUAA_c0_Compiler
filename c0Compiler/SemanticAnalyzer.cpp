@@ -152,8 +152,8 @@ void SemanticAnalyzer::bnz(symbolType comparator, const string &label, const str
     quadruple.addQuadruple(jmpOp, label, src1, src2);
 }
 
-void SemanticAnalyzer::switchBz(symbolType comparator, const string &label, const string &src1, const string &src2) {
-    quadruple.addQuadruple(SWITCH_BNE, label, src1, src2);
+void SemanticAnalyzer::switchBz(symbolType comparator, const string &label, const string &src2) {
+    quadruple.addQuadruple(SWITCH_BNE, label, "", src2);
 }
 
 void SemanticAnalyzer::switchVar(const string &dst) {

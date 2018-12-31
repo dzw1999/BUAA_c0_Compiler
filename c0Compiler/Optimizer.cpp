@@ -9,19 +9,19 @@ Optimizer &Optimizer::getOptimizer(Quadruple theOriginQuadruple, Quadruple theOp
     return instance;
 }
 
-void Optimizer::optimize() {
-    if (constantCombinationOption) {
-        //constantCombinationOptimize();
-    }
-    if (globalRegisterOption) {
-        //globalRegisterOptimize();
-    }
-    if (blockPublicExpressionOption) {
-        //blockPublicExpressionOptimize();
-    }
-
-}
-
+//void Optimizer::optimize() {
+//    if (constantCombinationOption) {
+//        //constantCombinationOptimize();
+//    }
+//    if (globalRegisterOption) {
+//        //globalRegisterOptimize();
+//    }
+//    if (blockPublicExpressionOption) {
+//        //blockPublicExpressionOptimize();
+//    }
+//
+//}
+//
 //void Optimizer::constantCombinationOptimize() {
 //    for (int i = 0; i < functionEntry.size(); i++) {
 //        for (int j = functionEntry[i];

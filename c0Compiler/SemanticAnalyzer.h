@@ -31,7 +31,7 @@ public:
 
     void bz(symbolType comparator, const string &label, const string &src1, const string &src2);
     void bnz(symbolType comparator, const string &label, const string &src1, const string &src2);
-    void switchBz(symbolType comparator, const string &label, const string &src1, const string &src2);
+    void switchBz(symbolType comparator, const string &label, const string &src2);
     void switchVar(const string &dst);
     void j(const string &label);
 

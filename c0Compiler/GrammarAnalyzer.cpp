@@ -978,7 +978,7 @@ void GrammarAnalyzer::caseStatement(const string &src1, const valueType &type, c
         ERROR(25);
     }
     GET_SYM;
-    semanticAnalyzer.switchBz(EQUAL, endLabel, src1, src2);
+    semanticAnalyzer.switchBz(EQUAL, endLabel, src2);
     statement();
     semanticAnalyzer.j(switchEndLabel);
     semanticAnalyzer.label(endLabel);
