@@ -46,6 +46,8 @@ struct symTableEntry{
 
 typedef map<string, symTableEntry> symTable;
 
+typedef map<string, string> allocationTable;
+
 //四元式
 enum Operator {
     ADD,    // 加法

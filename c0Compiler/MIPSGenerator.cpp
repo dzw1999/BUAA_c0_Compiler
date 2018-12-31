@@ -13,9 +13,11 @@
 
 MIPSGenerator &
 MIPSGenerator::getMIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
+                                GlobalRegisterAllocation &theGlobalRegisterAllocation,
                                 ExceptionHandler &theExceptionHandler,
                                 FILE *theMIPSFile) {
-    static MIPSGenerator instance(theSymbolTable, theStackManager, theExceptionHandler, theMIPSFile);
+    static MIPSGenerator instance(theSymbolTable, theStackManager, theGlobalRegisterAllocation, theExceptionHandler,
+                                  theMIPSFile);
     return instance;
 }
 
@@ -397,16 +399,36 @@ void MIPSGenerator::CALLToMIPS(Quad quad) {
     MIPSTextCode[MIPSTextLine++] = buffer;
     sprintf(buffer, "addiu $sp, $sp, -4\n");
     MIPSTextCode[MIPSTextLine++] = buffer;
+    //保存现场
+    map<string, allocationTable>::iterator
+    alloTableIter = globalRegisterAllocation.allocationTableList.find(stackManager.functionStack.top());
+    if(alloTableIter != globalRegisterAllocation.allocationTableList.end()) {
+        for (map<string, string>::iterator it = alloTableIter->second.begin();
+             it != alloTableIter->second.end(); ++it) {
+            sprintf(buffer, "sw %s, ($sp)\n", it->second.c_str());
+            MIPSTextCode[MIPSTextLine++] = buffer;
+            sprintf(buffer, "addiu $sp, $sp, -4\n");
+            MIPSTextCode[MIPSTextLine++] = buffer;
+        }
+    }
     //改base
-    sprintf(buffer, "addi $s0, $sp, 8\n");
+    sprintf(buffer, "addi $s0, $sp, %d\n", 8 + 4 * (int)(alloTableIter->second.size()));
     MIPSTextCode[MIPSTextLine++] = buffer;
     // 跳转
     sprintf(buffer, "jal %s\n", quad.src1.c_str());
     MIPSTextCode[MIPSTextLine++] = buffer;
+    //恢复现场
+    if(alloTableIter != globalRegisterAllocation.allocationTableList.end()) {
+        int regOff = -8;
+        for (map<string, string>::iterator it = alloTableIter->second.begin();
+             it != alloTableIter->second.end(); ++it) {
+            sprintf(buffer, "lw %s, %d($s0)\n", it->second.c_str(), regOff);
+            MIPSTextCode[MIPSTextLine++] = buffer;
+            regOff -= 4;
+        }
+    }
     //恢复ra
-    sprintf(buffer, "subi $t0, $s0, 4\n");
-    MIPSTextCode[MIPSTextLine++] = buffer;
-    sprintf(buffer, "lw $ra, ($t0)\n");
+    sprintf(buffer, "lw $ra, -4($s0)\n");
     MIPSTextCode[MIPSTextLine++] = buffer;
     //恢复base
     sprintf(buffer, "lw $s0, ($s0)\n");
@@ -665,10 +687,12 @@ void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
 
     if (src[0] == '\'' || isdigit(src[0]) || src[0] == '-' || src[0] == '+') {
         getConst(src, quadSrc);
-    }else {
+    } else {
+        map<string, allocationTable>::iterator
+        alloTable = globalRegisterAllocation.allocationTableList.find(stackManager.functionStack.top());
         symTableEntry ste = symbolTable.searchInLocalTable(src, stackManager.functionStack.top());
         symTableEntry gloSte = symbolTable.searchInGlobalTable(src);
-        int MIPSOffset = (ste.offset + 2) * 4;
+        int MIPSOffset = (ste.offset + 2 + alloTable->second.size()) * 4;
         if (ste.oType != FAULT) {
             //获取参数
             if (ste.oType == PARAMETER && ste.parameter != 0) {
@@ -681,7 +705,14 @@ void MIPSGenerator::getSrcToMIPS(string src, int quadSrc) {
             } else if (ste.oType == CONSTANT) {   //获取局部常量
                 getConst(ste, quadSrc);
             } else {        //获取局部变量
-                getLocal(MIPSOffset, quadSrc);
+                map<string, string>::iterator
+                alloTableEntry = alloTable->second.find(src);
+                if(alloTableEntry == alloTable->second.end())
+                    getLocal(MIPSOffset, quadSrc);
+                else{
+                    sprintf(buffer, "addu $s%d, $0, %s\n", quadSrc, alloTableEntry->second.c_str());
+                    MIPSTextCode[MIPSTextLine++] = buffer;
+                }
             }
         } else if (gloSte.oType != FAULT) {
             if (gloSte.oType == CONSTANT) {
@@ -713,13 +744,24 @@ void MIPSGenerator::writeDst(string dst) {
         sprintf(buffer, "#write s1 to %s\n", dst.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
+    map<string, allocationTable>::iterator
+    alloTable = globalRegisterAllocation.allocationTableList.find(stackManager.functionStack.top());
     symTableEntry ste = symbolTable.searchInLocalTable(dst, stackManager.functionStack.top());
     symTableEntry gloSte = symbolTable.searchInGlobalTable(dst);
-    int MIPSOffset = (ste.offset + 2) * 4;
+    int MIPSOffset = (ste.offset + 2 + alloTable->second.size()) * 4;
     if (ste.oType != FAULT) {
-        if (ste.parameter == 0)
-            writeLocal(MIPSOffset);
-        else {
+        if (ste.parameter == 0) {
+            map<string, allocationTable>::iterator
+            alloTable = globalRegisterAllocation.allocationTableList.find(stackManager.functionStack.top());
+            map<string, string>::iterator
+            alloTableEntry = alloTable->second.find(dst);
+            if (alloTableEntry == alloTable->second.end())
+                writeLocal(MIPSOffset);
+            else {
+                sprintf(buffer, "addu %s, $0, $s1\n", alloTableEntry->second.c_str());
+                MIPSTextCode[MIPSTextLine++] = buffer;
+            }
+        } else {
             symTableEntry funSte = symbolTable.searchInGlobalTable(stackManager.functionStack.top());
             if (funSte.oType == FAULT) {
                 ERROR(54);
@@ -813,13 +855,15 @@ void MIPSGenerator::writeGlobal(int offset) {
 }
 
 MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
+                             GlobalRegisterAllocation &theGlobalRegisterAllocation,
                              ExceptionHandler &theExceptionHandler,
                              FILE *theMIPSFile)
         : symbolTable(theSymbolTable),
           stackManager(theStackManager),
+          globalRegisterAllocation(theGlobalRegisterAllocation),
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;
     MIPSTextLine = 0;
-    debug = false;
+    debug = true;
 }
 

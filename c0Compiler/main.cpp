@@ -10,7 +10,7 @@
 #include "Quadruple.h"
 #include "MIPSGenerator.h"
 #include "Optimizer.h"
-
+#include "GlobalRegisterAllocation.h"
 
 int main(int argc, char *argv[]) {
     string fileName;
@@ -48,9 +48,12 @@ int main(int argc, char *argv[]) {
 
     GrammarAnalyzer grammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer, grammarOut);
 
+    GlobalRegisterAllocation globalRegisterAllocation(quadruple);
+
     Optimizer optimizer = Optimizer::getOptimizer(quadruple);
 
-    MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(symbolTable, stackManager, exceptionHandler, MIPSOut);
+    MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(symbolTable, stackManager, globalRegisterAllocation, exceptionHandler, MIPSOut);
+
 
     // 词法分析
     lexicalAnalyzer.lexicalAnalyze();
@@ -67,12 +70,16 @@ int main(int argc, char *argv[]) {
     quadruple.output(originQuadrupleOut);
     fclose(originQuadrupleOut);
 
+
+
     //优化
     if(optimizationOption) {
         optimizer.optimize();
         printf("Optimization succeeded.\n");
         //输出优化后四元式
         quadruple.output(optimizedQuadrupleOut);
+        //全局寄存器分配
+        globalRegisterAllocation.allocate();
         fclose(optimizedQuadrupleOut);
     }
 
