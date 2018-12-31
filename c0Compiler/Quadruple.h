@@ -13,17 +13,15 @@ using namespace std;
 
 class Quadruple{
 public:
-    Quadruple(FILE *quadrupleOut);
-    Quadruple(Quadruple &quadruple);
+    Quadruple();
     vector<Quad *> quadrupleList;
     void addQuadruple(Operator op, string dst, string src1, string src2, bool global = false);
-    void output();
+    void output(FILE *qout);
     string newTemp();
     int length();
     void toString(Quad q, string &res);
 
 private:
-    FILE *qout;
 };
 
 

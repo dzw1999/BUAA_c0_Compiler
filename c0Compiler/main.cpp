@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[]) {
     string fileName;
-    bool optimizationOption = false;
+    bool optimizationOption = true;
     if (argc > 1)
         fileName = argv[1];
     else
@@ -27,7 +27,9 @@ int main(int argc, char *argv[]) {
     }
     FILE *grammarOut = fopen("Grammar Analysis.txt", "w");
     FILE *originQuadrupleOut = fopen("Origin Quadruple.txt", "w");
-    FILE *optimizedQuadrupleOut = fopen("Optimized Quadruple.txt", "w");
+    FILE *optimizedQuadrupleOut;
+    if(optimizationOption)
+        optimizedQuadrupleOut = fopen("Optimized Quadruple.txt", "w");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
 
     printf("Start compiling...\n");
@@ -38,17 +40,15 @@ int main(int argc, char *argv[]) {
 
     SymbolTable symbolTable = SymbolTable::getSymbolTable();
 
-    Quadruple originQuadruple(originQuadrupleOut);
+    Quadruple quadruple;
 
-    Quadruple optimizedQuadruple(optimizedQuadrupleOut);
-
-    SemanticAnalyzer semanticAnalyzer = SemanticAnalyzer::getSemanticAnalyzer(originQuadruple);
+    SemanticAnalyzer semanticAnalyzer = SemanticAnalyzer::getSemanticAnalyzer(quadruple);
 
     StackManager stackManager;
 
     GrammarAnalyzer grammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer, grammarOut);
 
-    Optimizer optimizer = Optimizer::getOptimizer(originQuadruple, optimizedQuadruple);
+    Optimizer optimizer = Optimizer::getOptimizer(quadruple);
 
     MIPSGenerator mipsGenerator = MIPSGenerator::getMIPSGenerator(symbolTable, stackManager, exceptionHandler, MIPSOut);
 
@@ -64,22 +64,20 @@ int main(int argc, char *argv[]) {
     fclose(grammarOut);
 
     //输出原始四元式
-    originQuadruple.output();
+    quadruple.output(originQuadrupleOut);
     fclose(originQuadrupleOut);
 
     //优化
-    //optimizer.optimize();
-    printf("Optimization succeeded.\n");
-
-    //输出优化后四元式
-    optimizedQuadruple.output();
-    fclose(optimizedQuadrupleOut);
+    if(optimizationOption) {
+        optimizer.optimize();
+        printf("Optimization succeeded.\n");
+        //输出优化后四元式
+        quadruple.output(optimizedQuadrupleOut);
+        fclose(optimizedQuadrupleOut);
+    }
 
     //生成MIPS
-    if (optimizationOption)
-        mipsGenerator.generateMIPS(optimizedQuadruple);
-    else
-        mipsGenerator.generateMIPS(originQuadruple);
+    mipsGenerator.generateMIPS(quadruple);
     fclose(MIPSOut);
 
     fclose(fin);

@@ -820,6 +820,6 @@ MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStack
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;
     MIPSTextLine = 0;
-    debug = true;
+    debug = false;
 }
 
