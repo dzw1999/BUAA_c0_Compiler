@@ -13,6 +13,9 @@ void Optimizer::optimize() {
     if (constantCombinationOption) {
         constantCombinationOptimize();
     }
+    if(peepholeOption){
+        peepholeOptimize();
+    }
     if (blockPublicExpressionOption) {
         //blockPublicExpressionOptimize();
     }
@@ -59,6 +62,22 @@ void Optimizer::constantCombinationOptimize() {
     }
 }
 
+void Optimizer::peepholeOptimize() {
+    for(int i=0; i< originQuadruple.length() - 1; i++){
+        if(originQuadruple.quadrupleList[i]->dst.find("@temp") != string::npos){
+            string temp = originQuadruple.quadrupleList[i]->dst;
+            if(originQuadruple.quadrupleList[i+1]->src1 == temp){
+                originQuadruple.quadrupleList[i+1]->src1 = "@t2";
+                originQuadruple.quadrupleList[i]->dst = "@t2";
+            }
+            if(originQuadruple.quadrupleList[i+1]->src2 == temp){
+                originQuadruple.quadrupleList[i+1]->src2 = "@t2";
+                originQuadruple.quadrupleList[i]->dst = "@t2";
+            }
+        }
+    }
+}
+
 void Optimizer::blockPublicExpressionOptimize() {
     return;
 }
@@ -73,5 +92,6 @@ bool Optimizer::isConst(string a) {
 Optimizer::Optimizer(Quadruple &theOriginQuadruple)
         : originQuadruple(theOriginQuadruple) {
     constantCombinationOption = true;
+    peepholeOption = true;
     blockPublicExpressionOption = true;
 }

@@ -116,7 +116,7 @@ void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
             JToMIPS(quad);
             break;
         }
-        case SAVE_SCENE:{
+        case SAVE_SCENE: {
             SAVE_SCENEToMIPS(quad);
             break;
         }
@@ -187,7 +187,7 @@ void MIPSGenerator::ADDToMIPS(Quad quad) {
     string op2 = getSrcToMIPS(quad.src2, 2);
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
-    string dst = "$s1";
+    string dst = quad.dst == "@t2" ? "$t2" : "$s1";
     map<string, allocationTable>::iterator
             alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     map<string, string>::iterator
@@ -227,7 +227,7 @@ void MIPSGenerator::SUBToMIPS(Quad quad) {
     string op2 = getSrcToMIPS(quad.src2, 2);
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
-    string dst = "$s1";
+    string dst = quad.dst == "@t2" ? "$t2" : "$s1";
     map<string, allocationTable>::iterator
             alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     map<string, string>::iterator
@@ -268,7 +268,7 @@ void MIPSGenerator::MULToMIPS(Quad quad) {
     string op2 = getSrcToMIPS(quad.src2, 2, true);
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1, true);
-    string dst = "$s1";
+    string dst = quad.dst == "@t2" ? "$t2" : "$s1";
     map<string, allocationTable>::iterator
             alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     map<string, string>::iterator
@@ -299,7 +299,7 @@ void MIPSGenerator::DIVToMIPS(Quad quad) {
     string op2 = getSrcToMIPS(quad.src2, 2, true);
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1, true);
-    string dst = "$s1";
+    string dst = quad.dst == "@t2" ? "$t2" : "$s1";
     map<string, allocationTable>::iterator
             alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     map<string, string>::iterator
@@ -328,7 +328,12 @@ void MIPSGenerator::ASSToMIPS(Quad quad) {
     }
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
-    writeDst(quad.dst, op1);
+    if(quad.dst == "@t2"){
+        sprintf(buffer, "addu $t2, $0, %s\n", op1.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+    }
+    else
+        writeDst(quad.dst, op1);
 
     if (debug) {
         sprintf(buffer, "#end assign: %s = %s\n", quad.dst.c_str(), quad.src1.c_str());
@@ -343,7 +348,7 @@ void MIPSGenerator::ARASToMIPS(Quad quad) {
     }
     bool global = false;
     //value
-    string value = getSrcToMIPS(quad.src1, 2, true);
+    string value = getSrcToMIPS(quad.src1, 2);
     //存数组基地址
     getAddrToMIPS(quad.dst, 1, global);
     sprintf(buffer, "addu $t1, $s1, $0\n");
@@ -366,7 +371,12 @@ void MIPSGenerator::ARASToMIPS(Quad quad) {
             sprintf(buffer, "addu $t0, $t1, $s1\n");
     }
     MIPSTextCode[MIPSTextLine++] = buffer;
-    sprintf(buffer, "sw $s2, ($t0)\n");
+    if(isNum(value)){
+        sprintf(buffer, "addiu $s2, $0, %s\n", value.c_str());
+        MIPSTextCode[MIPSTextLine++] = buffer;
+        value = "$s2";
+    }
+    sprintf(buffer, "sw %s, ($t0)\n", value.c_str());
     MIPSTextCode[MIPSTextLine++] = buffer;
     if (debug) {
         sprintf(buffer, "#end assign: %s[%s] = %s\n", quad.dst.c_str(), quad.src2.c_str(), quad.src1.c_str());
@@ -380,7 +390,7 @@ void MIPSGenerator::GARToMIPS(Quad quad) {
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
     bool global = false;
-    string dst = "$s1";
+    string dst = quad.dst == "@t2" ? "$t2" : "$s1";
     map<string, allocationTable>::iterator
             alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     map<string, string>::iterator
@@ -812,7 +822,7 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
         }
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    //如是常量，直接返回
+    //如是常量或@t2，直接返回
     if (src[0] == '\'' || isdigit(src[0]) || src[0] == '-' || src[0] == '+') {
         if (intoReg) {
             getConst(src, quadSrc);
@@ -821,6 +831,8 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
         } else {
             return src;
         }
+    } else if (src == "@t2") {
+        return "$t2";
     } else {
         map<string, allocationTable>::iterator
                 alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
@@ -844,10 +856,7 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
                 map<string, string>::iterator alloTableEntry = alloTable->second.find(src);
                 if (alloTableEntry == alloTable->second.end())
                     getLocal(MIPSOffset, quadSrc);
-                else if(intoReg){
-                    sprintf(buffer, "addu $s%d, $0, %s\n", quadSrc, alloTableEntry->second.c_str());
-                    MIPSTextCode[MIPSTextLine++] = buffer;
-                } else{
+                else {
                     return alloTableEntry->second.c_str();
                 }
             }

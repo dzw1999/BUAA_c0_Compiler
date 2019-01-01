@@ -13,6 +13,7 @@ public:
     static Optimizer &getOptimizer(Quadruple &theOriginQuadruple);  // 单例设计模式
     bool constantCombinationOption;
     bool blockPublicExpressionOption;
+    bool peepholeOption;
 
     void optimize();
 
@@ -21,7 +22,9 @@ private:
     vector<int> functionEntry;
 
     void constantCombinationOptimize();
+    void peepholeOptimize();
     void blockPublicExpressionOptimize();
+
 
     bool isConst(string a);
     Optimizer(Quadruple &theQuadruple);
