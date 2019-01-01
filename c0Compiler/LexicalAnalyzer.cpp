@@ -13,7 +13,7 @@
     symbolNum++
 
 int isStrChar(char x) {
-    return x == 32 || x == 33 || x >= 35 && x <= 126;
+    return x == 32 || x == 33 || (35 <= x && x <= 126);
 }
 
 

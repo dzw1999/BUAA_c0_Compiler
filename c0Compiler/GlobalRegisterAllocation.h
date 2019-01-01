@@ -15,7 +15,7 @@ class GlobalRegisterAllocation {
 public:
     map<string, allocationTable> allocationTableList;
 
-    GlobalRegisterAllocation(Quadruple &theQuadruple);
+    explicit GlobalRegisterAllocation(Quadruple &theQuadruple);
     void allocate();
     void allocateWithoutSave();
 

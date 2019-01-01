@@ -11,43 +11,43 @@ GlobalRegisterAllocation::GlobalRegisterAllocation(Quadruple &theQuadruple) :qua
 
 void GlobalRegisterAllocation::allocate() {
     map<string, int> counter;
-    string curFunction = "";
+    string curFunction;
     allocationTable allocationTable1;
     int loop= 0;
     int threshold = 3;
-    for (int i = 0; i < quadruple.quadrupleList.size(); ++i) {
-        if (quadruple.quadrupleList[i]->op == FUNCTION_DEFINE || quadruple.quadrupleList[i]->op == MAIN_FUNCTION_DEFINE) {
+    for (auto &i : quadruple.quadrupleList) {
+        if (i->op == FUNCTION_DEFINE || i->op == MAIN_FUNCTION_DEFINE) {
             pool.clear();
             refreshPool();
-            curFunction = quadruple.quadrupleList[i]->dst;
+            curFunction = i->dst;
             allocationTable1.clear();
             counter.clear();
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == VAR_DECLARE){
-            if(quadruple.quadrupleList[i]->src2 == "1")
-                counter[quadruple.quadrupleList[i]->dst] = 0;
+        if(i->op == VAR_DECLARE){
+            if(i->src2 == "1")
+                counter[i->dst] = 0;
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == PARAMETER_DECLARE){
+        if(i->op == PARAMETER_DECLARE){
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == LAB){
-            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+        if(i->op == LAB){
+            if(i->src1.find("_label_while") != string::npos){
                 loop ++;
             }
         }
-        if(quadruple.quadrupleList[i]->op == J){
-            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+        if(i->op == J){
+            if(i->src1.find("_label_while") != string::npos){
                 loop --;
             }
         }
-        if(quadruple.quadrupleList[i]->op == FUNCTION_END) {
+        if(i->op == FUNCTION_END) {
             int maxRefer;
             do{
                 maxRefer = 0;
-                map<string, int>::iterator maxIt = counter.end();
-                for (map<string, int>::iterator it = counter.begin(); it != counter.end(); ++it) {
+                auto maxIt = counter.end();
+                for (auto it = counter.begin(); it != counter.end(); ++it) {
                     if (maxRefer < it->second && it->second >= threshold) {
                         maxIt = it;
                         maxRefer = it->second;
@@ -58,19 +58,19 @@ void GlobalRegisterAllocation::allocate() {
                     pool.erase(pool.begin());
                     counter.erase(maxIt->first);
                 }
-            }while (maxRefer >= threshold && pool.size() > 0);
+            }while (maxRefer >= threshold && !pool.empty());
             allocationTableList[curFunction] = allocationTable1;
         }
         map<string, int>::iterator counterIter;
-        counterIter = counter.find(quadruple.quadrupleList[i]->dst);
+        counterIter = counter.find(i->dst);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }
-        counterIter = counter.find(quadruple.quadrupleList[i]->src1);
+        counterIter = counter.find(i->src1);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }
-        counterIter = counter.find(quadruple.quadrupleList[i]->src2);
+        counterIter = counter.find(i->src2);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }
@@ -80,41 +80,41 @@ void GlobalRegisterAllocation::allocate() {
 
 void GlobalRegisterAllocation::allocateWithoutSave() {
     map<string, int> counter;
-    string curFunction = "";
+    string curFunction;
     allocationTable allocationTable1;
     int loop= 0;
     int threshold = 3;
-    for (int i = 0; i < quadruple.quadrupleList.size(); ++i) {
-        if (quadruple.quadrupleList[i]->op == FUNCTION_DEFINE || quadruple.quadrupleList[i]->op == MAIN_FUNCTION_DEFINE) {
-            curFunction = quadruple.quadrupleList[i]->dst;
+    for (auto &i : quadruple.quadrupleList) {
+        if (i->op == FUNCTION_DEFINE || i->op == MAIN_FUNCTION_DEFINE) {
+            curFunction = i->dst;
             allocationTable1.clear();
             counter.clear();
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == VAR_DECLARE){
-            if(quadruple.quadrupleList[i]->src2 == "1")
-                counter[quadruple.quadrupleList[i]->dst] = 0;
+        if(i->op == VAR_DECLARE){
+            if(i->src2 == "1")
+                counter[i->dst] = 0;
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == PARAMETER_DECLARE){
+        if(i->op == PARAMETER_DECLARE){
             continue;
         }
-        if(quadruple.quadrupleList[i]->op == LAB){
-            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+        if(i->op == LAB){
+            if(i->src1.find("_label_while") != string::npos){
                 loop ++;
             }
         }
-        if(quadruple.quadrupleList[i]->op == J){
-            if(quadruple.quadrupleList[i]->src1.find("_label_while") != string::npos){
+        if(i->op == J){
+            if(i->src1.find("_label_while") != string::npos){
                 loop --;
             }
         }
-        if(quadruple.quadrupleList[i]->op == FUNCTION_END) {
+        if(i->op == FUNCTION_END) {
             int maxRefer = threshold;
-            while (maxRefer >= threshold && pool.size() > 0){
+            while (maxRefer >= threshold && !pool.empty()){
                 maxRefer = threshold;
-                map<string, int>::iterator maxIt = counter.end();
-                for (map<string, int>::iterator it = counter.begin(); it != counter.end(); ++it) {
+                auto maxIt = counter.end();
+                for (auto it = counter.begin(); it != counter.end(); ++it) {
                     if (maxRefer <= it->second && it->second >= threshold) {
                         maxIt = it;
                         maxRefer = it->second;
@@ -131,15 +131,15 @@ void GlobalRegisterAllocation::allocateWithoutSave() {
             allocationTableList[curFunction] = allocationTable1;
         }
         map<string, int>::iterator counterIter;
-        counterIter = counter.find(quadruple.quadrupleList[i]->dst);
+        counterIter = counter.find(i->dst);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }
-        counterIter = counter.find(quadruple.quadrupleList[i]->src1);
+        counterIter = counter.find(i->src1);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }
-        counterIter = counter.find(quadruple.quadrupleList[i]->src2);
+        counterIter = counter.find(i->src2);
         if (counterIter != counter.end()) {
             counter[counterIter->first] += 1 + 5 * loop;
         }

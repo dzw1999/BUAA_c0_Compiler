@@ -10,8 +10,6 @@
 #include <cstdio>
 #include <cstring>
 
-#define GRAMMAR_OUTPUT
-
 #define SYM lexicalAnalyzer.symbolList[symbolCnt]
 
 #define SYM_TYPE lexicalAnalyzer.symbolTypeList[symbolCnt]
@@ -29,12 +27,8 @@
     exceptionHandler.errorLine = SYM_LINE; \
     throw x
 
-static string fun = "func_";
-
 void GrammarAnalyzer::printmsg(string format, int lineCnt) {
-#ifdef GRAMMAR_OUTPUT
     fprintf(fout, format.c_str(), lineCnt);
-#endif
 }
 
 GrammarAnalyzer::GrammarAnalyzer(
@@ -230,8 +224,9 @@ void GrammarAnalyzer::voidFunctionDefine() {
     if (SYM_TYPE != IDENTIFIER) {
         if (SYM_TYPE == MAIN) {
             ERROR(35);
-        } else
-        ERROR(8);
+        } else {
+            ERROR(8);
+        }
     }
     string thisFunction = SYM;
     string lastFunction = currentFunction;
@@ -441,7 +436,7 @@ void GrammarAnalyzer::varDefine() {
         if (!symbolTable.addToTable(ident, ste, currentFunction)) {
             ERROR(39);
         }
-        bool global = currentFunction == "";
+        bool global = currentFunction.empty();
         semanticAnalyzer.varDefine(type, ident, ste.length == 0 ? 1 : ste.length, global);
     } while (SYM_TYPE == COMMA);
 }
@@ -673,8 +668,6 @@ void GrammarAnalyzer::factor(string &rtn_factor, valueType &type, bool &variable
 
 void GrammarAnalyzer::statement() {
     string value;
-    valueType type;
-    bool variable;
     string rtn_func;
     valueType rtn_func_Type;
     if (SYM_TYPE == IF) {
@@ -1067,7 +1060,7 @@ void GrammarAnalyzer::valueParameterList(string callingFunction) {
             expression(rtn_expr, type, variable, staticValue);
             parameterOrder++;
             //查表 对照形参实参
-            symTableEntry paraSte = symbolTable.searchInTable(parameterOrder, callingFunction);
+            paraSte = symbolTable.searchInTable(parameterOrder, callingFunction);
             if (paraSte.parameter != parameterOrder) {
                 ERROR(40);
             }
@@ -1158,7 +1151,7 @@ void GrammarAnalyzer::printfStatement() {
         //查表, 如果不在表中,入表
         if (symbolTable.searchInTable(SYM, currentFunction).oType != FAULT) {
             //入表
-            symTableEntry ste = symbolTable.createSte(CONSTANT, STRING_TYPE, SYM.length());
+            symTableEntry ste = symbolTable.createSte(CONSTANT, STRING_TYPE, (int)SYM.length());
             if (!symbolTable.addToTable(SYM, ste, currentFunction)) {
                 ERROR(39);
             }

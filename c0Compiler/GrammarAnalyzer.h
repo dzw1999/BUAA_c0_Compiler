@@ -34,7 +34,6 @@ private:
     int symbolCnt;
     int saveSymbolCnt;
     string currentFunction;
-    int funcCnt;
 
     void printmsg(string format, int line);
 
