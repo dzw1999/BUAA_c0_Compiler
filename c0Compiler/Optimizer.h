@@ -12,7 +12,6 @@ class Optimizer {
 public:
     static Optimizer &getOptimizer(Quadruple &theOriginQuadruple);  // 单例设计模式
     bool constantCombinationOption;
-    bool globalRegisterOption;
     bool blockPublicExpressionOption;
 
     void optimize();
@@ -20,16 +19,10 @@ public:
 private:
     Quadruple &originQuadruple;
     vector<int> functionEntry;
-    vector<int> basicBlockEntry;
-    int currentEntry;
-    int currentExit;
 
-    void globalRegisterOptimize();
-    void blockPublicExpressionOptimize();
     void constantCombinationOptimize();
+    void blockPublicExpressionOptimize();
 
-    void splitIntoFunction();
-    void splitIntoBasicBlock();
     bool isConst(string a);
     Optimizer(Quadruple &theQuadruple);
 };

@@ -17,10 +17,9 @@ public:
 
     GlobalRegisterAllocation(Quadruple &theQuadruple);
     void allocate();
+
 private:
     Quadruple &quadruple;
-
-
 };
 
 

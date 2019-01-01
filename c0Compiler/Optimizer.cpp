@@ -13,9 +13,6 @@ void Optimizer::optimize() {
     if (constantCombinationOption) {
         constantCombinationOptimize();
     }
-    if (globalRegisterOption) {
-        //globalRegisterOptimize();
-    }
     if (blockPublicExpressionOption) {
         //blockPublicExpressionOptimize();
     }
@@ -62,36 +59,8 @@ void Optimizer::constantCombinationOptimize() {
     }
 }
 
-
-void Optimizer::globalRegisterOptimize() {
-
-}
-
 void Optimizer::blockPublicExpressionOptimize() {
-
-}
-
-void Optimizer::splitIntoFunction() {
-    for (int i = 0; i < originQuadruple.length(); i++) {
-        if (originQuadruple.quadrupleList[i]->op == FUNCTION_DEFINE ||
-            originQuadruple.quadrupleList[i]->op == MAIN_FUNCTION_DEFINE) {
-            functionEntry.push_back(i);
-        }
-    }
-}
-
-void Optimizer::splitIntoBasicBlock() {
-//    for (int i = 0; i < originQuadruple.length(); i++) {
-//        if (originQuadruple.quadrupleList[i]->op == J ||
-//            originQuadruple.quadrupleList[i]->op == BNE ||
-//            originQuadruple.quadrupleList[i]->op == BLE ||
-//            originQuadruple.quadrupleList[i]->op == BL ||
-//            originQuadruple.quadrupleList[i]->op == BGE ||
-//            originQuadruple.quadrupleList[i]->op == BG ||
-//            originQuadruple.quadrupleList[i]->op == SWITCH_BNE ||
-//            originQuadruple.quadrupleList[i]->op == RET ||
-//            originQuadruple.quadrupleList[i]->op == ||)
-//    }
+    return;
 }
 
 bool Optimizer::isConst(string a) {
@@ -103,9 +72,6 @@ bool Optimizer::isConst(string a) {
 
 Optimizer::Optimizer(Quadruple &theOriginQuadruple)
         : originQuadruple(theOriginQuadruple) {
-    currentEntry = 1;
-    currentExit = 1;
     constantCombinationOption = true;
-    globalRegisterOption = true;
     blockPublicExpressionOption = true;
 }
