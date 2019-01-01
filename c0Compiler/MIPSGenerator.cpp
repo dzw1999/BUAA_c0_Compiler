@@ -328,11 +328,10 @@ void MIPSGenerator::ASSToMIPS(Quad quad) {
     }
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
-    if(quad.dst == "@t2"){
+    if (quad.dst == "@t2") {
         sprintf(buffer, "addu $t2, $0, %s\n", op1.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
-    }
-    else
+    } else
         writeDst(quad.dst, op1);
 
     if (debug) {
@@ -371,7 +370,7 @@ void MIPSGenerator::ARASToMIPS(Quad quad) {
             sprintf(buffer, "addu $t0, $t1, $s1\n");
     }
     MIPSTextCode[MIPSTextLine++] = buffer;
-    if(isNum(value)){
+    if (isNum(value)) {
         sprintf(buffer, "addiu $s2, $0, %s\n", value.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
         value = "$s2";
@@ -854,7 +853,8 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
                     return to_string(ste.constValue);
             } else {        //获取局部变量
                 map<string, string>::iterator alloTableEntry = alloTable->second.find(src);
-                if (alloTableEntry == alloTable->second.end())
+                if (alloTableEntry == alloTable->second.end() ||
+                    alloTable == globalRegisterAllocation.allocationTableList.end())
                     getLocal(MIPSOffset, quadSrc);
                 else {
                     return alloTableEntry->second.c_str();
@@ -904,7 +904,8 @@ void MIPSGenerator::writeDst(string dst, string reg) {
                     *(stackManager.functionStack.end() - 1));
             map<string, string>::iterator
                     alloTableEntry = alloTable->second.find(dst);
-            if (alloTableEntry == alloTable->second.end())
+            if (alloTableEntry == alloTable->second.end() ||
+                alloTable == globalRegisterAllocation.allocationTableList.end())
                 writeLocal(MIPSOffset, reg);
             else {
                 if (isNum(reg))
@@ -1032,6 +1033,6 @@ MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStack
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;
     MIPSTextLine = 0;
-    debug = true;
+    debug = false;
 }
 

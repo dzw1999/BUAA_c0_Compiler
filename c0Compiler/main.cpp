@@ -30,6 +30,8 @@ int main(int argc, char *argv[]) {
     FILE *optimizedQuadrupleOut;
     if(optimizationOption)
         optimizedQuadrupleOut = fopen("Optimized Quadruple.txt", "w");
+    else
+        remove("Optimized Quadruple.txt");
     FILE *MIPSOut = fopen("MIPS code.asm", "w");
 
     printf("Start compiling...\n");
