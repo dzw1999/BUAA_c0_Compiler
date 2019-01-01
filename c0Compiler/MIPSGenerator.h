@@ -20,7 +20,7 @@ public:
                                            FILE *theMIPSFile
     );
 
-    void generateMIPS(Quadruple quadruple);
+    void generateMIPS(Quadruple quadruple, bool saveScene);
 
 private:
     SymbolTable &symbolTable;
@@ -35,7 +35,7 @@ private:
 
     bool isNum(string a);
 
-    void generateMIPSOfQuad(Quad quad);
+    void generateMIPSOfQuad(Quad quad, bool saveScene);
 
     void ADDToMIPS(Quad quad);
 
@@ -73,7 +73,7 @@ private:
 
     void SAVE_SCENEToMIPS(Quad quad);
 
-    void CALLToMIPS(Quad quad);
+    void CALLToMIPS(Quad quad, bool saveScene);
 
     void RETToMIPS(Quad quad);
 

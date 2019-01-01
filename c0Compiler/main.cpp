@@ -15,6 +15,7 @@
 int main(int argc, char *argv[]) {
     string fileName;
     bool optimizationOption = true;
+    bool saveScene = false;
     if (argc > 1)
         fileName = argv[1];
     else
@@ -81,12 +82,15 @@ int main(int argc, char *argv[]) {
         //输出优化后四元式
         quadruple.output(optimizedQuadrupleOut);
         //全局寄存器分配
-        globalRegisterAllocation.allocate();
+        if(saveScene)
+            globalRegisterAllocation.allocate();
+        else
+            globalRegisterAllocation.allocateWithoutSave();
         fclose(optimizedQuadrupleOut);
     }
 
     //生成MIPS
-    mipsGenerator.generateMIPS(quadruple);
+    mipsGenerator.generateMIPS(quadruple, saveScene);
     fclose(MIPSOut);
 
     fclose(fin);

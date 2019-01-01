@@ -28,10 +28,10 @@ MIPSGenerator::getMIPSGenerator(SymbolTable &theSymbolTable, StackManager &theSt
     return instance;
 }
 
-void MIPSGenerator::generateMIPS(Quadruple quadruple) {
+void MIPSGenerator::generateMIPS(Quadruple quadruple, bool saveScene) {
 
     for (int i = 0; i < quadruple.length(); ++i) {
-        generateMIPSOfQuad(*quadruple.quadrupleList[i]);
+        generateMIPSOfQuad(*quadruple.quadrupleList[i], saveScene);
     }
     fprintf(MIPSFile, ".data\n");
     for (int j = 0; j < MIPSDataLine; ++j) {
@@ -45,7 +45,7 @@ void MIPSGenerator::generateMIPS(Quadruple quadruple) {
 }
 
 
-void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
+void MIPSGenerator::generateMIPSOfQuad(Quad quad, bool saveScene) {
     Operator op = quad.op;
     switch (op) {
         case ADD: {
@@ -117,11 +117,12 @@ void MIPSGenerator::generateMIPSOfQuad(Quad quad) {
             break;
         }
         case SAVE_SCENE: {
-            SAVE_SCENEToMIPS(quad);
+            if(saveScene)
+                SAVE_SCENEToMIPS(quad);
             break;
         }
         case CALL: {
-            CALLToMIPS(quad);
+            CALLToMIPS(quad, saveScene);
             break;
         }
         case RET: {
@@ -521,7 +522,7 @@ void MIPSGenerator::SAVE_SCENEToMIPS(Quad quad) {
     }
 }
 
-void MIPSGenerator::CALLToMIPS(Quad quad) {
+void MIPSGenerator::CALLToMIPS(Quad quad, bool saveScene) {
     if (debug) {
         sprintf(buffer, "#call: %s\n", quad.src1.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
@@ -549,15 +550,18 @@ void MIPSGenerator::CALLToMIPS(Quad quad) {
     sprintf(buffer, "lw $s0, ($s0)\n");
     MIPSTextCode[MIPSTextLine++] = buffer;
     //恢复现场
-    map<string, allocationTable>::iterator
-            alloTableIter = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-    if (alloTableIter != globalRegisterAllocation.allocationTableList.end()) {
-        for (map<string, string>::reverse_iterator rit = alloTableIter->second.rbegin();
-             rit != alloTableIter->second.rend(); ++rit) {
-            sprintf(buffer, "addiu $sp, $sp, 4\n");
-            MIPSTextCode[MIPSTextLine++] = buffer;
-            sprintf(buffer, "lw %s, ($sp)\n", rit->second.c_str());
-            MIPSTextCode[MIPSTextLine++] = buffer;
+    if(saveScene) {
+        map<string, allocationTable>::iterator
+                alloTableIter = globalRegisterAllocation.allocationTableList.find(
+                *(stackManager.functionStack.end() - 1));
+        if (alloTableIter != globalRegisterAllocation.allocationTableList.end()) {
+            for (map<string, string>::reverse_iterator rit = alloTableIter->second.rbegin();
+                 rit != alloTableIter->second.rend(); ++rit) {
+                sprintf(buffer, "addiu $sp, $sp, 4\n");
+                MIPSTextCode[MIPSTextLine++] = buffer;
+                sprintf(buffer, "lw %s, ($sp)\n", rit->second.c_str());
+                MIPSTextCode[MIPSTextLine++] = buffer;
+            }
         }
     }
     //返回值入栈
