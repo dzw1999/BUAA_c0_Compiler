@@ -504,24 +504,26 @@ void GrammarAnalyzer::parameter(int cnt) {
 }
 
 void GrammarAnalyzer::expression(string &rtn_expr, valueType &type, bool &variable, int &staticValue, bool isSwitch) {
-    bool neg = false;
+    int numSymbol = 0;
     string src1, src2, dst;
     valueType src2Type;
     bool src2Variable;
     char op;
     if (SYM_TYPE == PLUS) {
+        numSymbol = 1;
         GET_SYM;
     } else if (SYM_TYPE == MINUS) {
-        neg = true;
+        numSymbol = -1;
         GET_SYM;
     }
     term(dst, type, variable, staticValue);
     printmsg("line %d, This is an expression.\n", SYM_LINE);
-    if (neg) {
+    if (numSymbol != 0) {
         src1 = dst;
         type = INT_TYPE;
-        staticValue = -staticValue;
-        semanticAnalyzer.sub("0", src1, dst);
+        staticValue = numSymbol * staticValue;
+        if(numSymbol == -1)
+            semanticAnalyzer.sub("0", src1, dst);
     }
     while (SYM_TYPE == PLUS || SYM_TYPE == MINUS) {
         if (SYM_TYPE == PLUS) {

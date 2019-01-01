@@ -844,7 +844,10 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
                 map<string, string>::iterator alloTableEntry = alloTable->second.find(src);
                 if (alloTableEntry == alloTable->second.end())
                     getLocal(MIPSOffset, quadSrc);
-                else {
+                else if(intoReg){
+                    sprintf(buffer, "addu $s%d, $0, %s\n", quadSrc, alloTableEntry->second.c_str());
+                    MIPSTextCode[MIPSTextLine++] = buffer;
+                } else{
                     return alloTableEntry->second.c_str();
                 }
             }
@@ -939,9 +942,7 @@ void MIPSGenerator::getLocal(int offset, int quadSrc) {
 
 void MIPSGenerator::getParameter(int paraNum, int paraOrder, int quadSrc) {
     int addr = (paraNum + 1 - paraOrder) * 4;
-    sprintf(buffer, "addi $t0, $0, %d\n", addr);
-    MIPSTextCode[MIPSTextLine++] = buffer;
-    sprintf(buffer, "addu $t0, $s0, $t0\n");
+    sprintf(buffer, "addiu $t0, $s0, %d\n", addr);
     MIPSTextCode[MIPSTextLine++] = buffer;
     sprintf(buffer, "lw $s%d, ($t0)\n", quadSrc);
     MIPSTextCode[MIPSTextLine++] = buffer;
