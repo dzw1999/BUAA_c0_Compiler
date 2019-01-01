@@ -1018,6 +1018,7 @@ void GrammarAnalyzer::functionCall(string &rtn_func, valueType &type) {
         ERROR(43);
     }
     string callingFunction = SYM;
+    semanticAnalyzer.saveScene(callingFunction);
     GET_SYM;
     if (SYM_TYPE != LEFT_BRACKET) {
         ERROR(3);

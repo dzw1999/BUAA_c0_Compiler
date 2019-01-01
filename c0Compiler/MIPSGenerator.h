@@ -32,6 +32,7 @@ private:
     int MIPSTextLine, MIPSDataLine;
     bool debug;
     char buffer[MAX_MIPS_CODE_LENGTH];
+
     bool isNum(string a);
 
     void generateMIPSOfQuad(Quad quad);
@@ -69,6 +70,8 @@ private:
     void SWITCH_VARToMIPS(Quad quad);
 
     void JToMIPS(Quad quad);
+
+    void SAVE_SCENEToMIPS(Quad quad);
 
     void CALLToMIPS(Quad quad);
 

@@ -20,6 +20,7 @@ public:
     void parameter(symbolType type, const string ident);
     void functionEnd();
 
+    void saveScene(string ident);
     void valueParameter(const string expr);
     void functionCall(const string ident, string &dst);
     void returnStatement(const string expr);

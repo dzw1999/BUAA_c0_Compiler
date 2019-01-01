@@ -61,6 +61,7 @@ void Quadruple::toString(Quad q, string &res) {
             "SWITCH_BNE",  //switch bne
             "SWITCH_VAR", //switch var
             "J",      // 无条件跳转
+            "SAVE_SCENE",   //保存现场
             "CALL",   // 函数调用，带返回值
             "RET",    // 函数返回
             "PUSH",   // 压栈
