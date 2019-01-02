@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     }
 
     //生成MIPS
-    mipsGenerator.generateMIPS(quadruple);
+    mipsGenerator.generateMIPS(quadruple, optimizationOption);
     fclose(MIPSOut);
 
     fclose(fin);
