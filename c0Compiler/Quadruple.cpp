@@ -80,3 +80,20 @@ void Quadruple::toString(Quad q, string &res) {
     res = rtn;
     return;
 }
+
+void Quadruple::combineVarDeclare() {
+    bool func = false;
+    for(int i = 0; i < length(); i++){
+        if(quadrupleList[i]->op == FUNCTION_DEFINE)
+            func = true;
+        if(func) {
+            if (quadrupleList[i]->op != VAR_DECLARE)
+                continue;
+            if (quadrupleList[i + 1]->op == VAR_DECLARE) {
+                quadrupleList[i + 1]->src2 = "offset";
+                quadrupleList.erase(quadrupleList.begin() + i);
+                i--;
+            }
+        }
+    }
+}

@@ -15,11 +15,13 @@ class Quadruple{
 public:
     Quadruple();
     vector<Quad *> quadrupleList;
+
     void addQuadruple(Operator op, string dst, string src1, string src2, bool global = false);
     void output(FILE *qout);
     string newTemp();
     int length();
     void toString(Quad q, string &res);
+    void combineVarDeclare();
 
 private:
 };

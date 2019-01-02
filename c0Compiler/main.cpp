@@ -68,11 +68,11 @@ int main(int argc, char *argv[]) {
         printf("Grammar and semantic analysis succeeded.\n");
     fclose(grammarOut);
 
+    quadruple.combineVarDeclare();
+
     //输出原始四元式
     quadruple.output(originQuadrupleOut);
     fclose(originQuadrupleOut);
-
-
 
     //优化
     if(optimizationOption) {
