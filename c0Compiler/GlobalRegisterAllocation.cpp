@@ -78,6 +78,7 @@ void GlobalRegisterAllocation::allocate() {
     }
 }
 
+//错误的分配方式
 void GlobalRegisterAllocation::allocateWithoutSave() {
     map<string, int> counter;
     string curFunction;

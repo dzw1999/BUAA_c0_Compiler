@@ -35,7 +35,7 @@ private:
 
     bool isNum(string a);
 
-    void generateMIPSOfQuad(Quad quad, bool saveScene);
+    void generateMIPSOfQuad(Quad quad, bool saveScene = true);
 
     void ADDToMIPS(Quad quad);
 
@@ -73,7 +73,7 @@ private:
 
     void SAVE_SCENEToMIPS(Quad quad);
 
-    void CALLToMIPS(Quad quad, bool saveScene);
+    void CALLToMIPS(Quad quad, bool saveScene = true);
 
     void RETToMIPS(Quad quad);
 
