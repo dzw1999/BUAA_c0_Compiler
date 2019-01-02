@@ -20,8 +20,9 @@ public:
     void allocateWithoutSave();
 
 private:
+    const vector<string> initPool = {"$16", "$17", "$18", "$19", "$20", "$21", "$22", "$23"};
     Quadruple &quadruple;
-    vector<string> pool = {"$11", "$12", "$13", "$14", "$15", "$19", "$21", "$22", "$23", "$24", "$25"};
+    vector<string> pool = initPool;
 
     void refreshPool();
 };

@@ -13,7 +13,7 @@ void Optimizer::optimize() {
     if (constantCombinationOption) {
         constantCombinationOptimize();
     }
-    if(peepholeOption){
+    if (peepholeOption) {
         peepholeOptimize();
     }
     if (blockPublicExpressionOption) {
@@ -33,14 +33,14 @@ void Optimizer::constantCombinationOptimize() {
             string replace = originQuadruple.quadrupleList[i]->dst;
             int num1;
             int num2;
-            if(originQuadruple.quadrupleList[i]->src1[0] == '\''){
-                num1 = (int)originQuadruple.quadrupleList[i]->src1[1];
-            } else{
+            if (originQuadruple.quadrupleList[i]->src1[0] == '\'') {
+                num1 = (int) originQuadruple.quadrupleList[i]->src1[1];
+            } else {
                 num1 = atoi(originQuadruple.quadrupleList[i]->src1.c_str());
             }
-            if(originQuadruple.quadrupleList[i]->src2[0] == '\''){
-                num2 = (int)originQuadruple.quadrupleList[i]->src2[1];
-            } else{
+            if (originQuadruple.quadrupleList[i]->src2[0] == '\'') {
+                num2 = (int) originQuadruple.quadrupleList[i]->src2[1];
+            } else {
                 num2 = atoi(originQuadruple.quadrupleList[i]->src2.c_str());
             }
             int resConst = originQuadruple.quadrupleList[i]->op == ADD ? num1 + num2 :
@@ -63,16 +63,35 @@ void Optimizer::constantCombinationOptimize() {
 }
 
 void Optimizer::peepholeOptimize() {
-    for(int i=0; i< originQuadruple.length() - 1; i++){
-        if(originQuadruple.quadrupleList[i]->dst.find("@temp") != string::npos){
+    SimplifyAssign();
+    tempRegAllocate();
+}
+
+void Optimizer::SimplifyAssign() {
+    for (int i = 0; i < originQuadruple.length() - 1; i++) {
+        if ((originQuadruple.quadrupleList[i]->op == ADD ||
+             originQuadruple.quadrupleList[i]->op == SUB ||
+             originQuadruple.quadrupleList[i]->op == MUL ||
+             originQuadruple.quadrupleList[i]->op == DIV ||
+             originQuadruple.quadrupleList[i]->op == GAR) &&
+            originQuadruple.quadrupleList[i + 1]->op == ASS) {
+            originQuadruple.quadrupleList[i]->dst = originQuadruple.quadrupleList[i + 1]->dst;
+            originQuadruple.quadrupleList.erase(originQuadruple.quadrupleList.begin() + i + 1);
+        }
+    }
+}
+
+void Optimizer::tempRegAllocate() {
+    for (int i = 0; i < originQuadruple.length() - 1; i++) {
+        if (originQuadruple.quadrupleList[i]->dst.find("@temp") != string::npos) {
             string temp = originQuadruple.quadrupleList[i]->dst;
-            if(originQuadruple.quadrupleList[i+1]->src1 == temp){
-                originQuadruple.quadrupleList[i+1]->src1 = "@t2";
-                originQuadruple.quadrupleList[i]->dst = "@t2";
+            if (originQuadruple.quadrupleList[i + 1]->src1 == temp) {
+                originQuadruple.quadrupleList[i + 1]->src1 = "@t5";
+                originQuadruple.quadrupleList[i]->dst = "@t5";
             }
-            if(originQuadruple.quadrupleList[i+1]->src2 == temp){
-                originQuadruple.quadrupleList[i+1]->src2 = "@t2";
-                originQuadruple.quadrupleList[i]->dst = "@t2";
+            if (originQuadruple.quadrupleList[i + 1]->src2 == temp) {
+                originQuadruple.quadrupleList[i + 1]->src2 = "@t5";
+                originQuadruple.quadrupleList[i]->dst = "@t5";
             }
         }
     }
@@ -94,4 +113,5 @@ Optimizer::Optimizer(Quadruple &theOriginQuadruple)
     constantCombinationOption = true;
     peepholeOption = true;
     blockPublicExpressionOption = true;
+    tempRegTable.clear();
 }

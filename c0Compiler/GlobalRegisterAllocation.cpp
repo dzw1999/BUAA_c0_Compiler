@@ -14,7 +14,7 @@ void GlobalRegisterAllocation::allocate() {
     string curFunction;
     allocationTable allocationTable1;
     int loop= 0;
-    int threshold = 3;
+    int threshold = 1;
     for (auto &i : quadruple.quadrupleList) {
         if (i->op == FUNCTION_DEFINE || i->op == MAIN_FUNCTION_DEFINE) {
             pool.clear();
@@ -149,5 +149,5 @@ void GlobalRegisterAllocation::allocateWithoutSave() {
 }
 
 void GlobalRegisterAllocation::refreshPool() {
-    pool = {"$11", "$12", "$13", "$14", "$15", "$19", "$21", "$22", "$23", "$24", "$25"};
+    pool = initPool;
 }

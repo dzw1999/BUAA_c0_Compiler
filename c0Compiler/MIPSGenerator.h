@@ -103,7 +103,7 @@ private:
 
     string getSrcToMIPS(string src, int quadSrc, bool intoReg = false);
 
-    void writeDst(string dst, string reg = "$s1");
+    void writeDst(string dst, string reg = "$t1");
 
     void getLocal(int offset, int quadSrc);
 
@@ -115,11 +115,11 @@ private:
 
     void getConst(symTableEntry ste, int quadSrc);
 
-    void writeLocal(int offset, string reg = "$s1");
+    void writeLocal(int offset, string reg = "$t1");
 
-    void writeGlobal(int offset, string reg = "$s1");
+    void writeGlobal(int offset, string reg = "$t1");
 
-    void writeParameter(int paraNum, int paraOrder, string reg = "$s1");
+    void writeParameter(int paraNum, int paraOrder, string reg = "$t1");
 
     MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
                   GlobalRegisterAllocation &theGlobalRegisterAllocation, ExceptionHandler &theExceptionHandler,

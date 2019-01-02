@@ -7,6 +7,7 @@
 
 #include "Quadruple.h"
 #include <vector>
+#include <map>
 
 class Optimizer {
 public:
@@ -20,11 +21,15 @@ public:
 private:
     Quadruple &originQuadruple;
     vector<int> functionEntry;
+    vector<string> tempRegPool = {"$13", "$14", "$15", "$24", "$25"};
+    map<string, string> tempRegTable;
 
     void constantCombinationOptimize();
     void peepholeOptimize();
     void blockPublicExpressionOptimize();
 
+    void tempRegAllocate();
+    void SimplifyAssign();
 
     bool isConst(string a);
     Optimizer(Quadruple &theQuadruple);

@@ -20,7 +20,7 @@ public:
     void parameter(symbolType type, const string ident);
     void functionEnd();
 
-    void saveScene(string ident);
+    void saveScene(string currentFunction, string callingFunction);
     void valueParameter(const string expr);
     void functionCall(const string ident, string &dst);
     void returnStatement(const string expr);
@@ -49,7 +49,6 @@ public:
                        valueType arrayType,
                        valueType valueType);
     void getFromArray(const string &arrname, const string &index, string &dst);
-    void assignFromFunction();
 
     const string &label(const string &lab);
 private:

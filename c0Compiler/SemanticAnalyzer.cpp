@@ -59,9 +59,9 @@ void SemanticAnalyzer::functionEnd() {
     quadruple.addQuadruple(op, "", "", "");
 }
 
-void SemanticAnalyzer::saveScene(string ident) {
+void SemanticAnalyzer::saveScene(string currentFunction, string callingFunction) {
     Operator op = SAVE_SCENE;
-    quadruple.addQuadruple(op, "", ident, "");
+    quadruple.addQuadruple(op, "", currentFunction, callingFunction);
 }
 
 void SemanticAnalyzer::valueParameter(const string expr) {
