@@ -46,7 +46,7 @@ void Optimizer::constantCombinationOptimize() {
             int resConst = originQuadruple.quadrupleList[i]->op == ADD ? num1 + num2 :
                            originQuadruple.quadrupleList[i]->op == SUB ? num1 - num2 :
                            originQuadruple.quadrupleList[i]->op == MUL ? num1 * num2 :
-                           originQuadruple.quadrupleList[i]->op == DIV ? num1 / num2 : 0;
+                           originQuadruple.quadrupleList[i]->op == DIV ?  (num2 == 0 ? 0 : num1 / num2) : 0;
             originQuadruple.quadrupleList.erase(originQuadruple.quadrupleList.begin() + i);
             i--;
             for (int k = i; originQuadruple.length(); k++) {

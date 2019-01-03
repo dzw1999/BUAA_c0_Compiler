@@ -251,7 +251,7 @@ void MIPSGenerator::SUBToMIPS(Quad quad) {
     } else if (isNum(op2)) {
         sprintf(buffer, "addiu %s, %s, %d\n", dst.c_str(), op1.c_str(), -1 * atoi(op2.c_str()));
     } else if (isNum(op1)) {
-        sprintf(buffer, "addiu %s, %s, %d\n", dst.c_str(), op2.c_str(), -1 * atoi(op2.c_str()));
+        sprintf(buffer, "addiu %s, %s, %d\n", dst.c_str(), op2.c_str(), -1 * atoi(op1.c_str()));
         MIPSTextCode[MIPSTextLine++] = buffer;
         sprintf(buffer, "subu %s, $0, %s\n", dst.c_str(), dst.c_str());
     } else {
