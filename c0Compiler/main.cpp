@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     GrammarAnalyzer grammarAnalyzer(lexicalAnalyzer, exceptionHandler, symbolTable, semanticAnalyzer, grammarOut);
 
-    GlobalRegisterAllocation globalRegisterAllocation(quadruple);
+    GlobalRegisterAllocation globalRegisterAllocation(quadruple, symbolTable);
 
     Optimizer optimizer = Optimizer::getOptimizer(quadruple);
 

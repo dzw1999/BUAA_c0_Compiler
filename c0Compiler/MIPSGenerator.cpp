@@ -12,7 +12,7 @@
     throw x
 
 bool MIPSGenerator::isNum(string a) {
-    return isdigit(a[0]) || a[0] == '+' || a[0] == '-' ;
+    return isdigit(a[0]) || a[0] == '+' || a[0] == '-';
 }
 
 MIPSGenerator &
@@ -186,7 +186,7 @@ void MIPSGenerator::ADDToMIPS(Quad quad) {
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
     string dst;
-    if(quad.dst == "@t5"){
+    if (quad.dst == "@t5") {
         dst = "$t5";
     } else {
         dst = "$t1";
@@ -231,7 +231,7 @@ void MIPSGenerator::SUBToMIPS(Quad quad) {
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1);
     string dst;
-    if(quad.dst == "@t5"){
+    if (quad.dst == "@t5") {
         dst = "$t5";
     } else {
         dst = "$t1";
@@ -277,7 +277,7 @@ void MIPSGenerator::MULToMIPS(Quad quad) {
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1, true);
     string dst;
-    if(quad.dst == "@t5"){
+    if (quad.dst == "@t5") {
         dst = "$t5";
     } else {
         dst = "$t1";
@@ -313,7 +313,7 @@ void MIPSGenerator::DIVToMIPS(Quad quad) {
     //src1
     string op1 = getSrcToMIPS(quad.src1, 1, true);
     string dst;
-    if(quad.dst == "@t5"){
+    if (quad.dst == "@t5") {
         dst = "$t5";
     } else {
         dst = "$t1";
@@ -406,7 +406,7 @@ void MIPSGenerator::GARToMIPS(Quad quad) {
     }
     bool global = false;
     string dst;
-    if(quad.dst == "@t5"){
+    if (quad.dst == "@t5") {
         dst = "$t5";
     } else {
         dst = "$t1";
@@ -524,9 +524,7 @@ void MIPSGenerator::SAVE_SCENEToMIPS(Quad quad) {
         sprintf(buffer, "#save scene: %s\n", quad.src1.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    auto curAlloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-    auto callAlloTable = globalRegisterAllocation.allocationTableList.find(quad.src2);
-    auto alloTable = curAlloTable->second.size() > callAlloTable->second.size() ? callAlloTable : curAlloTable;
+    auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
     if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
         for (auto &it : alloTable->second) {
             sprintf(buffer, "sw %s, ($sp)\n", it.second.c_str());
@@ -799,7 +797,15 @@ void MIPSGenerator::FUNCTION_DEFINEToMIPS(Quad quad) {
 }
 
 void MIPSGenerator::PARAMETERToMIPS(Quad quad) {
-    return;
+    auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
+    if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
+        auto alloTableEntry = alloTable->second.find(quad.dst);
+        if (alloTableEntry != alloTable->second.end()) {
+            string para = getSrcToMIPS(quad.dst, 1, true, true);
+            sprintf(buffer, "addu %s, $0, $t1\n", alloTableEntry->second.c_str());
+            MIPSTextCode[MIPSTextLine++] = buffer;
+        }
+    }
 }
 
 void MIPSGenerator::FUNCTION_ENDToMIPS(Quad quad) {
@@ -826,7 +832,7 @@ void MIPSGenerator::getAddrToMIPS(string src, int getSrc, bool &global) {
     }
 }
 
-string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
+string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg, bool paraDeclare) {
     char ret[5];
     sprintf(ret, "$t%d", quadSrc);
     if (debug) {
@@ -854,25 +860,28 @@ string MIPSGenerator::getSrcToMIPS(string src, int quadSrc, bool intoReg) {
         symTableEntry gloSte = symbolTable.searchInGlobalTable(src);
         int MIPSOffset = (ste.offset + 2) * 4;
         if (ste.oType != FAULT) {
-            //获取参数
-            if (ste.oType == PARAMETER && ste.parameter != 0) {
-                symTableEntry funSte = symbolTable.searchInGlobalTable(*(stackManager.functionStack.end() - 1));
-                if (funSte.oType == FAULT) {
-                    ERROR(54);
-                }
-                getParameter(funSte.parameter, ste.parameter, quadSrc);
-            } else if (ste.oType == CONSTANT) {   //获取局部常量
+            if (ste.oType == CONSTANT) {   //获取局部常量
                 if (intoReg) {
                     getConst(ste, quadSrc);
                 } else
                     return to_string(ste.constValue);
             } else {        //获取局部变量
-                if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
-                    auto alloTableEntry = alloTable->second.find(src);
-                    if (alloTableEntry != alloTable->second.end())
-                        return alloTableEntry->second;
+                if (!paraDeclare) {
+                    if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
+                        auto alloTableEntry = alloTable->second.find(src);
+                        if (alloTableEntry != alloTable->second.end())
+                            return alloTableEntry->second;
+                    }
                 }
-                getLocal(MIPSOffset, quadSrc);
+                if (ste.oType == PARAMETER && ste.parameter != 0) {
+                    symTableEntry funSte = symbolTable.searchInGlobalTable(*(stackManager.functionStack.end() - 1));
+                    if (funSte.oType == FAULT) {
+                        ERROR(54);
+                    }
+                    getParameter(funSte.parameter, ste.parameter, quadSrc);
+                } else {
+                    getLocal(MIPSOffset, quadSrc);
+                }
             }
         } else if (gloSte.oType != FAULT) {
             if (gloSte.oType == CONSTANT) { //全局常量
@@ -912,31 +921,29 @@ void MIPSGenerator::writeDst(string dst, string reg) {
     symTableEntry gloSte = symbolTable.searchInGlobalTable(dst);
     int MIPSOffset = (ste.offset + 2) * 4;
     if (ste.oType != FAULT) {
-        if (ste.parameter != 0) {
+        auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
+        if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
+            auto alloTableEntry = alloTable->second.find(dst);
+            if (alloTableEntry != alloTable->second.end()) {
+                if (isNum(reg))
+                    sprintf(buffer, "addiu %s, $0, %s\n", alloTableEntry->second.c_str(), reg.c_str());
+                else
+                    sprintf(buffer, "addu %s, $0, %s\n", alloTableEntry->second.c_str(), reg.c_str());
+                MIPSTextCode[MIPSTextLine++] = buffer;
+                return;
+            }
+        }
+        if (ste.oType == PARAMETER && ste.parameter != 0) {
             symTableEntry funSte = symbolTable.searchInGlobalTable(*(stackManager.functionStack.end() - 1));
             if (funSte.oType == FAULT) {
                 ERROR(54);
             }
             writeParameter(funSte.parameter, ste.parameter, reg);
         } else {
-            auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-            if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
-                auto alloTableEntry = alloTable->second.find(dst);
-                if (alloTableEntry != alloTable->second.end()) {
-                    if (isNum(reg))
-                        sprintf(buffer, "addiu %s, $0, %s\n", alloTableEntry->second.c_str(), reg.c_str());
-                    else
-                        sprintf(buffer, "addu %s, $0, %s\n", alloTableEntry->second.c_str(), reg.c_str());
-                    MIPSTextCode[MIPSTextLine++] = buffer;
-                } else
-                    writeLocal(MIPSOffset, reg);
-            } else
-                writeLocal(MIPSOffset, reg);
+            writeLocal(MIPSOffset, reg);
         }
-
     } else if (gloSte.oType != FAULT) {
         writeGlobal(gloSte.offset * 4, reg);
-
     } else {
         if (isNum(reg)) {
             sprintf(buffer, "addiu $t1, $0, %s\n", reg.c_str());
@@ -1042,6 +1049,6 @@ MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStack
           exceptionHandler(theExceptionHandler) {
     MIPSFile = theMIPSFile;
     MIPSTextLine = 0;
-    debug = false;
+    debug = true;
 }
 

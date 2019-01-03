@@ -101,7 +101,7 @@ private:
 
     void getAddrToMIPS(string src, int getSrc, bool &global);
 
-    string getSrcToMIPS(string src, int quadSrc, bool intoReg = false);
+    string getSrcToMIPS(string src, int quadSrc, bool intoReg = false, bool paraDeclare = false);
 
     void writeDst(string dst, string reg = "$t1");
 

@@ -4,7 +4,8 @@
 
 #include "GlobalRegisterAllocation.h"
 
-GlobalRegisterAllocation::GlobalRegisterAllocation(Quadruple &theQuadruple) :quadruple(theQuadruple){
+GlobalRegisterAllocation::GlobalRegisterAllocation(Quadruple &theQuadruple, SymbolTable &theSymbolTable)
+        : quadruple(theQuadruple), symbolTable(theSymbolTable) {
     allocationTableList.clear();
     refreshPool();
 }
@@ -13,7 +14,7 @@ void GlobalRegisterAllocation::allocate() {
     map<string, int> counter;
     string curFunction;
     allocationTable allocationTable1;
-    int loop= 0;
+    int loop = 0;
     int threshold = 1;
     for (auto &i : quadruple.quadrupleList) {
         if (i->op == FUNCTION_DEFINE || i->op == MAIN_FUNCTION_DEFINE) {
@@ -22,29 +23,31 @@ void GlobalRegisterAllocation::allocate() {
             curFunction = i->dst;
             allocationTable1.clear();
             counter.clear();
+            auto symTable = symbolTable.localSymTableList.find(i->dst);
+            if(symTable == symbolTable.localSymTableList.end()){
+                printf("Symbol Table Error.\n");
+                throw ;
+            }
+            for(auto &it : symTable->second){
+                if((it.second.oType == VARIABLE || it.second.oType == PARAMETER) && it.second.length == 0){
+                    counter[it.first] = 0;
+                }
+            }
             continue;
         }
-        if(i->op == VAR_DECLARE){
-            if(i->src2 == "1")
-                counter[i->dst] = 0;
-            continue;
-        }
-        if(i->op == PARAMETER_DECLARE){
-            continue;
-        }
-        if(i->op == LAB){
-            if(i->src1.find("_label_while") != string::npos){
-                loop ++;
+        if (i->op == LAB) {
+            if (i->src1.find("_label_while") != string::npos) {
+                loop++;
             }
         }
-        if(i->op == J){
-            if(i->src1.find("_label_while") != string::npos){
-                loop --;
+        if (i->op == J) {
+            if (i->src1.find("_label_while") != string::npos) {
+                loop--;
             }
         }
-        if(i->op == FUNCTION_END) {
+        if (i->op == FUNCTION_END) {
             int maxRefer;
-            do{
+            do {
                 maxRefer = 0;
                 auto maxIt = counter.end();
                 for (auto it = counter.begin(); it != counter.end(); ++it) {
@@ -53,12 +56,12 @@ void GlobalRegisterAllocation::allocate() {
                         maxRefer = it->second;
                     }
                 }
-                if(maxIt != counter.end()) {
+                if (maxIt != counter.end()) {
                     allocationTable1[maxIt->first] = pool[0];
                     pool.erase(pool.begin());
                     counter.erase(maxIt->first);
                 }
-            }while (maxRefer >= threshold && !pool.empty());
+            } while (maxRefer >= threshold && !pool.empty());
             allocationTableList[curFunction] = allocationTable1;
         }
         map<string, int>::iterator counterIter;
@@ -83,7 +86,7 @@ void GlobalRegisterAllocation::allocateWithoutSave() {
     map<string, int> counter;
     string curFunction;
     allocationTable allocationTable1;
-    int loop= 0;
+    int loop = 0;
     int threshold = 3;
     for (auto &i : quadruple.quadrupleList) {
         if (i->op == FUNCTION_DEFINE || i->op == MAIN_FUNCTION_DEFINE) {
@@ -92,27 +95,27 @@ void GlobalRegisterAllocation::allocateWithoutSave() {
             counter.clear();
             continue;
         }
-        if(i->op == VAR_DECLARE){
-            if(i->src2 == "1")
+        if (i->op == VAR_DECLARE) {
+            if (i->src2 == "1")
                 counter[i->dst] = 0;
             continue;
         }
-        if(i->op == PARAMETER_DECLARE){
+        if (i->op == PARAMETER_DECLARE) {
             continue;
         }
-        if(i->op == LAB){
-            if(i->src1.find("_label_while") != string::npos){
-                loop ++;
+        if (i->op == LAB) {
+            if (i->src1.find("_label_while") != string::npos) {
+                loop++;
             }
         }
-        if(i->op == J){
-            if(i->src1.find("_label_while") != string::npos){
-                loop --;
+        if (i->op == J) {
+            if (i->src1.find("_label_while") != string::npos) {
+                loop--;
             }
         }
-        if(i->op == FUNCTION_END) {
+        if (i->op == FUNCTION_END) {
             int maxRefer = threshold;
-            while (maxRefer >= threshold && !pool.empty()){
+            while (maxRefer >= threshold && !pool.empty()) {
                 maxRefer = threshold;
                 auto maxIt = counter.end();
                 for (auto it = counter.begin(); it != counter.end(); ++it) {
@@ -121,11 +124,11 @@ void GlobalRegisterAllocation::allocateWithoutSave() {
                         maxRefer = it->second;
                     }
                 }
-                if(maxIt != counter.end()) {
+                if (maxIt != counter.end()) {
                     allocationTable1[maxIt->first] = pool[0];
                     pool.erase(pool.begin());
                     counter.erase(maxIt->first);
-                } else{
+                } else {
                     break;
                 }
             }

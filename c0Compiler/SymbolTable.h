@@ -14,6 +14,10 @@ using namespace std;
 
 class SymbolTable {
 public:
+    map<string, int> localSymTableOffsetList;
+    map<string, symTable> localSymTableList;
+    symTable globalSymTable;
+
     static SymbolTable &getSymbolTable();  // 单例设计模式
     symTableEntry createSte(objectType oType,valueType vType, int length = 0, int parameter = 0, int constValue = 0);
 
@@ -26,9 +30,6 @@ public:
 
 private:
     int globalSymTableOffset;
-    symTable globalSymTable;
-    map<string, int> localSymTableOffsetList;
-    map<string, symTable> localSymTableList;
 
     SymbolTable();
 };
