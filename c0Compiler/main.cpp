@@ -82,6 +82,7 @@ int main(int argc, char *argv[]) {
         quadruple.output(optimizedQuadrupleOut);
         //全局寄存器分配
         globalRegisterAllocation.allocate();
+        globalRegisterAllocation.analyzeCallingChain();
         fclose(optimizedQuadrupleOut);
     }
 

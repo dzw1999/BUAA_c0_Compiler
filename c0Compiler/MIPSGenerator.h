@@ -95,7 +95,7 @@ private:
 
     void FUNCTION_DEFINEToMIPS(Quad quad);
 
-    void PARAMETERToMIPS(Quad quad);
+    void PARAMETERToMIPS(Quad quad, bool parameter = true);
 
     void FUNCTION_ENDToMIPS(Quad quad);
 
@@ -120,6 +120,8 @@ private:
     void writeGlobal(int offset, string reg = "$t1");
 
     void writeParameter(int paraNum, int paraOrder, string reg = "$t1");
+
+    int toOrder(string reg);
 
     MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
                   GlobalRegisterAllocation &theGlobalRegisterAllocation, ExceptionHandler &theExceptionHandler,

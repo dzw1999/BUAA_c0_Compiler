@@ -524,13 +524,18 @@ void MIPSGenerator::SAVE_SCENEToMIPS(Quad quad) {
         sprintf(buffer, "#save scene: %s\n", quad.src1.c_str());
         MIPSTextCode[MIPSTextLine++] = buffer;
     }
-    auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-    if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
-        for (auto &it : alloTable->second) {
-            sprintf(buffer, "sw %s, ($sp)\n", it.second.c_str());
+    auto alloTable = globalRegisterAllocation.reverseAllocationTableList.find(*(stackManager.functionStack.end() - 1));
+    if (alloTable != globalRegisterAllocation.reverseAllocationTableList.end()) {
+        int cnt = 0;
+        for(auto &it : alloTable->second){
+            if (cnt >= globalRegisterAllocation.regSave[quad.src1]) {
+                break;
+            }
+            sprintf(buffer, "sw %s, ($sp)\n", it.first.c_str());
             MIPSTextCode[MIPSTextLine++] = buffer;
             sprintf(buffer, "addiu $sp, $sp, -4\n");
             MIPSTextCode[MIPSTextLine++] = buffer;
+            cnt++;
         }
     }
     if (debug) {
@@ -568,13 +573,18 @@ void MIPSGenerator::CALLToMIPS(Quad quad, bool saveScene) {
     MIPSTextCode[MIPSTextLine++] = buffer;
     //恢复现场
     if (saveScene) {
-        auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-        if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
-            for (map<string, string>::reverse_iterator rit = alloTable->second.rbegin();
-                 rit != alloTable->second.rend(); ++rit) {
+        auto alloTable = globalRegisterAllocation.reverseAllocationTableList.find(*(stackManager.functionStack.end() - 1));
+        if (alloTable != globalRegisterAllocation.reverseAllocationTableList.end()) {
+            int cnt = alloTable->second.size() -
+                      globalRegisterAllocation.regSave[*(stackManager.functionStack.end() - 1)];
+            for(allocationTable::reverse_iterator rit = alloTable->second.rbegin(); rit != alloTable->second.rend(); ++rit){
+                if (cnt > 0) {
+                    cnt--;
+                    continue;
+                }
                 sprintf(buffer, "addiu $sp, $sp, 4\n");
                 MIPSTextCode[MIPSTextLine++] = buffer;
-                sprintf(buffer, "lw %s, ($sp)\n", rit->second.c_str());
+                sprintf(buffer, "lw %s, ($sp)\n", rit->first.c_str());
                 MIPSTextCode[MIPSTextLine++] = buffer;
             }
         }
@@ -796,14 +806,16 @@ void MIPSGenerator::FUNCTION_DEFINEToMIPS(Quad quad) {
     stackManager.functionStack.push_back(quad.dst);
 }
 
-void MIPSGenerator::PARAMETERToMIPS(Quad quad) {
-    auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
-    if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
-        auto alloTableEntry = alloTable->second.find(quad.dst);
-        if (alloTableEntry != alloTable->second.end()) {
-            string para = getSrcToMIPS(quad.dst, 1, true, true);
-            sprintf(buffer, "addu %s, $0, $t1\n", alloTableEntry->second.c_str());
-            MIPSTextCode[MIPSTextLine++] = buffer;
+void MIPSGenerator::PARAMETERToMIPS(Quad quad, bool parameter) {
+    if (parameter) {
+        auto alloTable = globalRegisterAllocation.allocationTableList.find(*(stackManager.functionStack.end() - 1));
+        if (alloTable != globalRegisterAllocation.allocationTableList.end()) {
+            auto alloTableEntry = alloTable->second.find(quad.dst);
+            if (alloTableEntry != alloTable->second.end()) {
+                string para = getSrcToMIPS(quad.dst, 1, true, true);
+                sprintf(buffer, "addu %s, $0, $t1\n", alloTableEntry->second.c_str());
+                MIPSTextCode[MIPSTextLine++] = buffer;
+            }
         }
     }
 }
@@ -1037,6 +1049,10 @@ void MIPSGenerator::writeGlobal(int offset, string reg) {
     }
     sprintf(buffer, "sw %s, ($t0)\n", reg.c_str());
     MIPSTextCode[MIPSTextLine++] = buffer;
+}
+
+int MIPSGenerator::toOrder(string reg) {
+    return atoi(reg.substr(1, reg.length() - 1).c_str());
 }
 
 MIPSGenerator::MIPSGenerator(SymbolTable &theSymbolTable, StackManager &theStackManager,
