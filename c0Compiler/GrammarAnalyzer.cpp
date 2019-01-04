@@ -53,7 +53,7 @@ int GrammarAnalyzer::grammarAnalyze() {
         return 1;
     }
     if (SYM_TYPE == FINISH) {
-        return 0;
+        return exceptionHandler.errorCnt != 0;
     }
     return 1;
 }
@@ -76,9 +76,10 @@ void GrammarAnalyzer::program() {
     }
 
     // [函数定义]
-    saveSymbolCnt = symbolCnt;
+
 
     while (SYM_TYPE == VOID || SYM_TYPE == INT || SYM_TYPE == CHAR) {
+        saveSymbolCnt = symbolCnt;
         try {
             if (SYM_TYPE == VOID) {
                 voidFunctionDefine();
@@ -95,7 +96,7 @@ void GrammarAnalyzer::program() {
             } else {
                 exceptionHandler.error(errorCode, SYM_LINE);
                 while (SYM_TYPE != CONST && SYM_TYPE != INT && SYM_TYPE != CHAR && SYM_TYPE != VOID &&
-                       SYM_TYPE != FINISH && SYM_TYPE != RIGHT_BRACE) {
+                       SYM_TYPE != FINISH) {
                     GET_SYM;
                 }
             }

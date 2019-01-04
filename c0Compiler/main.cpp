@@ -62,8 +62,10 @@ int main(int argc, char *argv[]) {
     printf("Lexical analysis succeeded.\n");
 
     // 语法分析(语义分析伴随语法分析)
-    if (grammarAnalyzer.grammarAnalyze() == 1)
+    if (grammarAnalyzer.grammarAnalyze() == 1){
         printf("Exception occurred in grammar analysis.\n");
+        return 0;
+    }
     else
         printf("Grammar and semantic analysis succeeded.\n");
     fclose(grammarOut);
